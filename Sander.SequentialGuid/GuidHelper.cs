@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Numerics;
-using System.Runtime.CompilerServices;
+using System.Reflection;
+using System.Reflection.Emit;
 using Sander.SequentialGuid.App;
 
 namespace Sander.SequentialGuid
@@ -76,28 +78,28 @@ namespace Sander.SequentialGuid
 
 			/*
 			 *    // Returns an unsigned byte array containing the GUID.
-        public byte[] ToByteArray()
-        {
-            byte[] g = new byte[16];
+		public byte[] ToByteArray()
+		{
+			byte[] g = new byte[16];
 
-            g[0] = (byte)(_a);
-            g[1] = (byte)(_a >> 8);
-            g[2] = (byte)(_a >> 16);
-            g[3] = (byte)(_a >> 24);
-            g[4] = (byte)(_b);
-            g[5] = (byte)(_b >> 8);
-            g[6] = (byte)(_c);
-            g[7] = (byte)(_c >> 8);
-            g[8] = _d;
-            g[9] = _e;
-            g[10] = _f;
-            g[11] = _g;
-            g[12] = _h;
-            g[13] = _i;
-            g[14] = _j;
-            g[15] = _k;
+			g[0] = (byte)(_a);
+			g[1] = (byte)(_a >> 8);
+			g[2] = (byte)(_a >> 16);
+			g[3] = (byte)(_a >> 24);
+			g[4] = (byte)(_b);
+			g[5] = (byte)(_b >> 8);
+			g[6] = (byte)(_c);
+			g[7] = (byte)(_c >> 8);
+			g[8] = _d;
+			g[9] = _e;
+			g[10] = _f;
+			g[11] = _g;
+			g[12] = _h;
+			g[13] = _i;
+			g[14] = _j;
+			g[15] = _k;
 
-            return g;
+			return g;
 			 */
 
 			//after https://github.com/dotnet/corefx/blob/7622efd2dbd363a632e00b6b95be4d990ea125de/src/Common/src/CoreLib/System/Guid.cs#L989
@@ -113,6 +115,22 @@ namespace Sander.SequentialGuid
 			var guidByte = guid.ToByteArray()[Remap()];
 
 			return HexToChar(position % 2 == 0 ? (guidByte & 0xF0) >> 4 : guidByte & 0x0F);
+		}
+
+		//     From https://stackoverflow.com/a/16222886/3248515, modified
+		private static Func<TS, T> CreateGetter<TS, T>(string fieldName)
+		{
+			var field = typeof(Guid).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
+			Debug.Assert(field != null, nameof(field) + " != null");
+			Debug.Assert(field.ReflectedType != null, "field.ReflectedType != null");
+			var setterMethod = new DynamicMethod($"{field.ReflectedType.FullName}.get_{field.Name}",
+				typeof(T), new[]
+					{ typeof(TS) }, true);
+			var gen = setterMethod.GetILGenerator();
+			gen.Emit(OpCodes.Ldarg_0);
+			gen.Emit(OpCodes.Ldfld, field);
+			gen.Emit(OpCodes.Ret);
+			return (Func<TS, T>)setterMethod.CreateDelegate(typeof(Func<TS, T>));
 		}
 	}
 }
