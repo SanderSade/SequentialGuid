@@ -44,7 +44,7 @@ namespace PerformanceTests
 			public List<Guid> SequentialTest()
 			{
 				var result = new List<Guid>(Count);
-				for (int i = 0; i < Count; i++)
+				for (var i = 0; i < Count; i++)
 				{
 					result.Add(_sequentialGuid.Next());
 				}
