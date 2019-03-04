@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Numerics;
-using System.Reflection;
-using System.Reflection.Emit;
 using Sander.SequentialGuid.App;
 
 namespace Sander.SequentialGuid
@@ -18,6 +15,7 @@ namespace Sander.SequentialGuid
 		public static BigInteger AsBigInteger(this Guid guid) =>
 			new BigInteger(guid.ToByteArray());
 
+
 		/// <summary>
 		///     Get GUID from BigInteger.
 		///     <para>Note that it is possible for BigInteger not to fit to GUID</para>
@@ -25,11 +23,13 @@ namespace Sander.SequentialGuid
 		public static Guid FromBigInteger(BigInteger integer) =>
 			new Guid(integer.ToByteArray());
 
+
 		/// <summary>
 		///     Convert GUID to decimal
 		/// </summary>
 		public static decimal AsDecimal(this Guid guid) =>
 			GuidToDecimalConverter.GuidToDecimal(guid);
+
 
 		/// <summary>
 		///     Convert decimal to Guid
@@ -37,11 +37,13 @@ namespace Sander.SequentialGuid
 		public static Guid FromDecimal(decimal dec) =>
 			GuidToDecimalConverter.DecimalToGuid(dec);
 
+
 		/// <summary>
 		///     Convert GUID to pair of longs
 		/// </summary>
 		public static (long, long) AsLongs(this Guid guid) =>
 			GuidToLongConverter.GuidToLongs(guid);
+
 
 		/// <summary>
 		///     Convert two longs to Guid
@@ -53,14 +55,14 @@ namespace Sander.SequentialGuid
 		/// <summary>
 		/// Get character at the specified position (0..32).
 		/// Character is returned in lowercase
-		/// <para>Faster than using guid-to-string</para>
+		/// <para>Far faster and user less memory than using guid-to-string</para>
 		/// </summary>
 		public static char GetCharacterAt(this Guid guid, int position)
 		{
 			//remap position to internal byte order
 			int Remap()
 			{
-				var remap = position / 2;
+				var remap = position >> 1;
 				switch (remap)
 				{
 					case 0: return 3;
@@ -76,32 +78,6 @@ namespace Sander.SequentialGuid
 				}
 			}
 
-			/*
-			 *    // Returns an unsigned byte array containing the GUID.
-		public byte[] ToByteArray()
-		{
-			byte[] g = new byte[16];
-
-			g[0] = (byte)(_a);
-			g[1] = (byte)(_a >> 8);
-			g[2] = (byte)(_a >> 16);
-			g[3] = (byte)(_a >> 24);
-			g[4] = (byte)(_b);
-			g[5] = (byte)(_b >> 8);
-			g[6] = (byte)(_c);
-			g[7] = (byte)(_c >> 8);
-			g[8] = _d;
-			g[9] = _e;
-			g[10] = _f;
-			g[11] = _g;
-			g[12] = _h;
-			g[13] = _i;
-			g[14] = _j;
-			g[15] = _k;
-
-			return g;
-			 */
-
 			//after https://github.com/dotnet/corefx/blob/7622efd2dbd363a632e00b6b95be4d990ea125de/src/Common/src/CoreLib/System/Guid.cs#L989
 			char HexToChar(int aq)
 			{
@@ -110,13 +86,26 @@ namespace Sander.SequentialGuid
 			}
 
 			if (position < 0 || position > 31)
-				throw new ArgumentOutOfRangeException(nameof(position), position, $"Position must be between 0 and 31, but received {position}");
+				throw new ArgumentOutOfRangeException(nameof(position), position,
+					$"Position must be between 0 and 31, but received {position}");
 
-			var guidByte = guid.ToByteArray()[Remap()];
+			var guidByte = PrivateFieldProvider.GetByte(guid, Remap());
 
 			return HexToChar(position % 2 == 0 ? (guidByte & 0xF0) >> 4 : guidByte & 0x0F);
 		}
 
-	
+		/// <summary>
+		/// Get byte from GUID without converting GUID to byte array
+		/// <para>This is very slightly faster than using Guid.ToByteArray(), but uses far less memory</para>
+		/// </summary>		
+		public static byte GetByteAt(this Guid guid, int position)
+		{
+
+			if (position < 0 || position > 31)
+				throw new ArgumentOutOfRangeException(nameof(position), position,
+					$"Position must be between 0 and 31, but received {position}");
+
+			return PrivateFieldProvider.GetByte(guid, position);
+		}
 	}
 }

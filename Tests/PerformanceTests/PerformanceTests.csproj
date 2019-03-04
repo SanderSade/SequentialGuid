@@ -175,13 +175,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GetByteAtBenchmark.cs" />
+    <Compile Include="CharacterAtBenchmark.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SequentialGuidBenchmark.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="Results\PerformanceTests.Program.CharacterAtBenchmark-report-github.md" />
+    <None Include="Results\PerformanceTests.CharacterAtBenchmark-report-github.md" />
+    <None Include="Results\PerformanceTests.GetByteAtBenchmark-report-github.md" />
+    <None Include="Results\PerformanceTests.SequentialGuidBenchmark-report-github.md" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.Analyzers.2.6.1\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />

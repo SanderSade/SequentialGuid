@@ -14,6 +14,11 @@
                 From https://stackoverflow.com/a/49372627/3248515
             </summary>
         </member>
+        <member name="T:Sander.SequentialGuid.App.PrivateFieldProvider">
+            <summary>
+            Naive "get private field value" implementation
+            </summary>
+        </member>
         <member name="T:Sander.SequentialGuid.GuidHelper">
             <summary>
                 Useful extension and helper methods for GUID
@@ -54,8 +59,14 @@
             <summary>
             Get character at the specified position (0..32).
             Character is returned in lowercase
-            <para>Faster than using guid-to-string</para>
+            <para>Far faster and user less memory than using guid-to-string</para>
             </summary>
+        </member>
+        <member name="M:Sander.SequentialGuid.GuidHelper.GetByteAt(System.Guid,System.Int32)">
+            <summary>
+            Get byte from GUID without converting GUID to byte array
+            <para>This is very slightly faster than using Guid.ToByteArray(), but uses far less memory</para>
+            </summary>		
         </member>
         <member name="T:Sander.SequentialGuid.SequentialGuid">
             <summary>
