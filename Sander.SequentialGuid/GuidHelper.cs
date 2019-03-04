@@ -53,57 +53,62 @@ namespace Sander.SequentialGuid
 
 
 		/// <summary>
-		/// Get character at the specified position (0..32).
+		/// Get the hex character at the specified position (0..31).
 		/// Character is returned in lowercase
-		/// <para>Far faster and user less memory than using guid-to-string</para>
+		/// <para>Far faster and uses less memory than using guid-to-string</para>
 		/// </summary>
 		public static char GetCharacterAt(this Guid guid, int position)
-		{
-			//remap position to internal byte order
-			int Remap()
-			{
-				var remap = position >> 1;
-				switch (remap)
-				{
-					case 0: return 3;
-					case 1: return 2;
-					case 2: return 1;
-					case 3: return 0;
-					case 4: return 5;
-					case 5: return 4;
-					case 6: return 7;
-					case 7: return 6;
-					default:
-						return remap;
-				}
-			}
-
-			//after https://github.com/dotnet/corefx/blob/7622efd2dbd363a632e00b6b95be4d990ea125de/src/Common/src/CoreLib/System/Guid.cs#L989
-			char HexToChar(int aq)
-			{
-				aq = aq & 0xf;
-				return (char)(aq > 9 ? aq - 10 + 0x61 : aq + 0x30);
-			}
-
+		{		
 			if (position < 0 || position > 31)
 				throw new ArgumentOutOfRangeException(nameof(position), position,
 					$"Position must be between 0 and 31, but received {position}");
 
-			var guidByte = PrivateFieldProvider.GetByte(guid, Remap());
+			//remap position to internal byte order, as characters 0..13 do not match the byte order
+			var remap = position >> 1;
+			switch (remap)
+			{
+				case 0: remap = 3;
+					break;
+				case 1:
+					remap = 2;
+					break;
+				case 2:
+					remap = 1;
+					break;
+				case 3:
+					remap = 0;
+					break;
+				case 4:
+					remap = 5;
+					break;
+				case 5:
+					remap = 4;
+					break;
+				case 6:
+					remap = 7;
+					break;
+				case 7:
+					remap = 6;
+					break;				
+			}
 
-			return HexToChar(position % 2 == 0 ? (guidByte & 0xF0) >> 4 : guidByte & 0x0F);
+			var guidByte = PrivateFieldProvider.GetByte(guid, remap);
+
+			//logic similar to https://github.com/dotnet/corefx/blob/7622efd2dbd363a632e00b6b95be4d990ea125de/src/Common/src/CoreLib/System/Guid.cs#L989,
+			//but we're using nibble and not full byte
+			var nibbleByte = (position % 2 == 0 ? (guidByte & 0xF0) >> 4 : guidByte & 0x0F) & 0xf;			
+			return (char)(nibbleByte > 9 ? nibbleByte + 107 : nibbleByte + 48);
 		}
 
 		/// <summary>
-		/// Get byte from GUID without converting GUID to byte array
+		/// Get byte from GUID without converting GUID to byte array. Position is the native position of the byte in GUID structure (0..15)
 		/// <para>This is very slightly faster than using Guid.ToByteArray(), but uses far less memory</para>
 		/// </summary>		
 		public static byte GetByteAt(this Guid guid, int position)
 		{
-
-			if (position < 0 || position > 31)
+			if (position < 0 || position > 15)
 				throw new ArgumentOutOfRangeException(nameof(position), position,
-					$"Position must be between 0 and 31, but received {position}");
+					$"Position must be between 0 and 15, but received {position}");
 
 			return PrivateFieldProvider.GetByte(guid, position);
 		}

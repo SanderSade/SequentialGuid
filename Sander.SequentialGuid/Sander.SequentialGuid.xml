@@ -57,14 +57,14 @@
         </member>
         <member name="M:Sander.SequentialGuid.GuidHelper.GetCharacterAt(System.Guid,System.Int32)">
             <summary>
-            Get character at the specified position (0..32).
+            Get character at the specified position (0..31).
             Character is returned in lowercase
             <para>Far faster and user less memory than using guid-to-string</para>
             </summary>
         </member>
         <member name="M:Sander.SequentialGuid.GuidHelper.GetByteAt(System.Guid,System.Int32)">
             <summary>
-            Get byte from GUID without converting GUID to byte array
+            Get byte from GUID without converting GUID to byte array. Position is the native position of the byte in GUID structure (0..15)
             <para>This is very slightly faster than using Guid.ToByteArray(), but uses far less memory</para>
             </summary>		
         </member>
