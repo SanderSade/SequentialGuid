@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sander.SequentialGuid</name>
+    </assembly>
+    <members>
+        <member name="T:Sander.SequentialGuid.App.GuidToDecimalConverter">
+            <summary>
+            Based on https://stackoverflow.com/a/3563872/3248515
+            </summary>
+        </member>
+        <member name="T:Sander.SequentialGuid.App.GuidToLongConverter">
+            <summary>
+                From https://stackoverflow.com/a/49372627/3248515
+            </summary>
+        </member>
+        <member name="T:Sander.SequentialGuid.GuidHelper">
+            <summary>
+                Useful extension and helper methods for GUID
+            </summary>
+        </member>
+        <member name="M:Sander.SequentialGuid.GuidHelper.AsBigInteger(System.Guid)">
+            <summary>
+                Convert GUID to BigInteger
+            </summary>
+        </member>
+        <member name="M:Sander.SequentialGuid.GuidHelper.FromBigInteger(System.Numerics.BigInteger)">
+            <summary>
+                Get GUID from BigInteger.
+                <para>Note that it is possible for BigInteger not to fit to GUID</para>
+            </summary>
+        </member>
+        <member name="M:Sander.SequentialGuid.GuidHelper.AsDecimal(System.Guid)">
+            <summary>
+                Convert GUID to decimal
+            </summary>
+        </member>
+        <member name="M:Sander.SequentialGuid.GuidHelper.FromDecimal(System.Decimal)">
+            <summary>
+                Convert decimal to Guid
+            </summary>
+        </member>
+        <member name="M:Sander.SequentialGuid.GuidHelper.AsLongs(System.Guid)">
+            <summary>
+                Convert GUID to pair of longs
+            </summary>
+        </member>
+        <member name="M:Sander.SequentialGuid.GuidHelper.FromLongs(System.Int64,System.Int64)">
+            <summary>
+                Convert two longs to Guid
+            </summary>
+        </member>
+        <member name="M:Sander.SequentialGuid.GuidHelper.GetCharacterAt(System.Guid,System.Int32)">
+            <summary>
+            Get character at the specified position (0..32).
+            Character is returned in lowercase
+            <para>Faster than using guid-to-string</para>
+            </summary>
+        </member>
+        <member name="T:Sander.SequentialGuid.SequentialGuid">
+            <summary>
+                Sequential GUID
+                <para>Thread-safe</para>
+            </summary>
+        </member>
+        <member name="M:Sander.SequentialGuid.SequentialGuid.#ctor">
+            <summary>
+                Creates a sequential GUID based on random GUID
+            </summary>
+        </member>
+        <member name="M:Sander.SequentialGuid.SequentialGuid.#ctor(System.Guid)">
+            <summary>
+                Create sequential GUID from existing GUID
+            </summary>
+        </member>
+        <member name="M:Sander.SequentialGuid.SequentialGuid.Next">
+            <summary>
+                Return next sequential value of GUID
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
