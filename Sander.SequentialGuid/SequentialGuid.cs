@@ -31,12 +31,22 @@ namespace Sander.SequentialGuid
 		/// <summary>
 		///     Return next sequential value of GUID
 		/// </summary>
-		/// <returns></returns>
 		public Guid Next()
 		{
 			lock (_lock)
 			{
-				_guidInteger = _guidInteger + 1;
+				_guidInteger++;
+				return GuidHelper.FromBigInteger(_guidInteger);
+			}
+		}
+
+		/// <summary>
+		/// Get the current value of the sequential GUID
+		/// </summary>
+		public Guid Current()
+		{
+			lock (_lock)
+			{
 				return GuidHelper.FromBigInteger(_guidInteger);
 			}
 		}

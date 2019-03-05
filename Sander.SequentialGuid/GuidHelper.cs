@@ -18,14 +18,24 @@ namespace Sander.SequentialGuid
 
 		/// <summary>
 		///     Get GUID from BigInteger.
-		///     <para>Note that it is possible for BigInteger not to fit to GUID</para>
+		///     <para>Note that it is possible for BigInteger not to fit to GUID, ffffffff-ffff-ffff-ffff-ffffffffffff + 1 will overflow GUID and return 00000000-00...,
+		/// ffffffff-ffff-ffff-ffff-ffffffffffff + 2 returns 00000001-00... and so forth</para>
 		/// </summary>
-		public static Guid FromBigInteger(BigInteger integer) =>
-			new Guid(integer.ToByteArray());
+		public static Guid FromBigInteger(BigInteger integer)
+		{
+			var byteArray = integer.ToByteArray();
+			//GUID can only be initialized from 16-byte array,
+			//but BigInteger can be a single byte
+			//or more than 16 bytes...
+			if (byteArray.Length != 16)
+				Array.Resize(ref byteArray, 16);
+			return new Guid(byteArray);
+		}
 
 
 		/// <summary>
-		///     Convert GUID to decimal
+		///     Convert GUID to decimal. Use with caution!
+		/// <para>Note that not all GUIDs fit to decimal - 00000000-ffff-ffff-ffff-ffffffffffff is the biggest GUID value decimal can hold</para>
 		/// </summary>
 		public static decimal ToDecimal(this Guid guid) =>
 			GuidConverter.GuidToDecimal(guid);
@@ -40,6 +50,7 @@ namespace Sander.SequentialGuid
 
 		/// <summary>
 		///     Convert GUID to pair of Int64s, sometimes used in languages without native GUID implementation (Javascript)
+		/// <para>Note that two longs cannot hold GUID larger than ffffffff-ffff-7fff-ffff-ffffffffff7f, but that shouldn't be issue in most realistic use cases</para>
 		/// </summary>
 		public static (long, long) ToLongs(this Guid guid) =>
 			GuidConverter.GuidToLongs(guid);
@@ -47,6 +58,7 @@ namespace Sander.SequentialGuid
 
 		/// <summary>
 		///     Convert two longs to Guid
+		/// <para>Note that two longs cannot hold GUID larger than ffffffff-ffff-7fff-ffff-ffffffffff7f, but that shouldn't be issue in most realistic use cases</para>
 		/// </summary>
 		public static Guid FromLongs(long first, long second) =>
 			GuidConverter.LongsToGuid(first, second);

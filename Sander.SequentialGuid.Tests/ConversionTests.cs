@@ -18,9 +18,42 @@ namespace Sander.SequentialGuid.Tests
 		}
 
 		[TestMethod]
+		public void BigIntegerEmptyTest()
+		{
+			var guid = Guid.Empty;
+			var bigInt = guid.ToBigInteger();
+			Trace.WriteLine($"{guid}: {bigInt}");
+			var revert = GuidHelper.FromBigInteger(bigInt);
+			Assert.AreEqual(guid, revert);
+		}
+
+
+		[TestMethod]
+		public void BigIntegerOverflowTest()
+		{
+			var guid = new Guid("ffffffffffffffffffffffffffffffff");
+			var bigInt = guid.ToBigInteger();
+			bigInt++;
+			var revert = GuidHelper.FromBigInteger(bigInt);
+			Trace.WriteLine($"{guid}: {revert}");
+			Assert.AreEqual(Guid.Empty, revert);
+		}
+
+		[TestMethod]
 		public void DecimalTest()
 		{
 			var guid = Guid.NewGuid();
+			var dec = guid.ToDecimal();
+			Trace.WriteLine($"{guid}: {dec}");
+			var revert = GuidHelper.FromDecimal(dec);
+			Assert.AreEqual(guid, revert);
+		}
+
+
+		[TestMethod]
+		public void DecimalEmptyTest()
+		{
+			var guid = Guid.Empty;
 			var dec = guid.ToDecimal();
 			Trace.WriteLine($"{guid}: {dec}");
 			var revert = GuidHelper.FromDecimal(dec);
@@ -35,6 +68,23 @@ namespace Sander.SequentialGuid.Tests
 			Trace.WriteLine($"{guid}: {longs.Item1}, {longs.Item2}");
 			var revert = GuidHelper.FromLongs(longs.Item1, longs.Item2);
 			Assert.AreEqual(guid, revert);
+		}
+
+		[TestMethod]
+		public void Int64MaxTest()
+		{
+			var guid = GuidHelper.FromLongs(long.MaxValue, long.MaxValue);
+			Trace.WriteLine(guid);
+		}
+
+
+		[TestMethod]
+		public void Int64OverflowTest()
+		{
+			var guid = new Guid("ffffffffffffffffffffffffffffffff");
+			var longs = guid.ToLongs();
+
+			Trace.WriteLine($"{longs.Item1}.{longs.Item2} {guid}");
 		}
 
 		[TestMethod]
