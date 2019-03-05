@@ -36,5 +36,37 @@ namespace Sander.SequentialGuid.Tests
 			var revert = GuidHelper.FromLongs(longs.Item1, longs.Item2);
 			Assert.AreEqual(guid, revert);
 		}
+
+		[TestMethod]
+		public void GetCharacterTest()
+		{
+			var guid = Guid.NewGuid();
+			var guidString = guid.ToString("N");
+			Trace.WriteLine(guid);
+			Trace.WriteLine(guidString);
+			for (var i = 0; i < 32; i++)
+			{
+				var c = guid.GetCharacterAt(i);
+				var s = guidString[i];
+				Trace.Write($"{s}:{c}.");
+				Assert.AreEqual(s, c);
+			}
+		}
+
+
+		[TestMethod]
+		public void GetByteTest()
+		{
+			var guid = Guid.NewGuid();
+			var byteArray = guid.ToByteArray();
+			Trace.WriteLine(guid);
+			for (var i = 0; i < 16; i++)
+			{
+				var a = guid.GetByteAt(i);
+				var s = byteArray[i];
+				Trace.Write($"{s}:{a}.");
+				Assert.AreEqual(s, a);
+			}
+		}
 	}
 }

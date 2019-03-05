@@ -39,7 +39,7 @@ namespace Sander.SequentialGuid
 
 
 		/// <summary>
-		///     Convert GUID to pair of Int64s
+		///     Convert GUID to pair of Int64s, sometimes used in languages without native GUID implementation (Javascript)
 		/// </summary>
 		public static (long, long) ToLongs(this Guid guid) =>
 			GuidConverter.GuidToLongs(guid);
@@ -97,7 +97,7 @@ namespace Sander.SequentialGuid
 			//logic similar to https://github.com/dotnet/corefx/blob/7622efd2dbd363a632e00b6b95be4d990ea125de/src/Common/src/CoreLib/System/Guid.cs#L989,
 			//but we're using nibble and not full byte
 			var nibbleByte = (position % 2 == 0 ? (guidByte & 0xF0) >> 4 : guidByte & 0x0F) & 0xf;
-			return (char)(nibbleByte > 9 ? nibbleByte + 107 : nibbleByte + 48);
+			return (char)(nibbleByte > 9 ? nibbleByte + 87 : nibbleByte + 48);
 		}
 
 		/// <summary>
