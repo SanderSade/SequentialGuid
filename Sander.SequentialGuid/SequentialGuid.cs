@@ -26,7 +26,7 @@ namespace Sander.SequentialGuid
 		///     Create sequential GUID from existing GUID
 		/// </summary>
 		public SequentialGuid(Guid originalGuid) =>
-			_guidInteger = originalGuid.AsBigInteger();
+			_guidInteger = originalGuid.ToBigInteger();
 
 		/// <summary>
 		///     Return next sequential value of GUID

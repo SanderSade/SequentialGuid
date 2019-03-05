@@ -4,11 +4,23 @@ using System.Runtime.InteropServices;
 namespace Sander.SequentialGuid.App
 {
 	/// <summary>
-	///     From https://stackoverflow.com/a/49372627/3248515
+	/// Based on https://stackoverflow.com/a/3563872/3248515
 	/// </summary>
-	internal sealed class GuidToLongConverter
+	internal static class GuidConverter
 	{
-		private static GuidConverter _converter;
+		private static GuidConverterStruct _converter;
+
+		internal static Guid DecimalToGuid(decimal dec)
+		{
+			_converter.Decimal = dec;
+			return _converter.Guid;
+		}
+
+		internal static decimal GuidToDecimal(Guid guid)
+		{
+			_converter.Guid = guid;
+			return _converter.Decimal;
+		}
 
 		internal static (long, long) GuidToLongs(Guid guid)
 		{
@@ -24,10 +36,11 @@ namespace Sander.SequentialGuid.App
 		}
 
 		[StructLayout(LayoutKind.Explicit)]
-		private struct GuidConverter
+		private struct GuidConverterStruct
 		{
-			//[FieldOffset(0)]
-			//internal decimal Decimal;
+			[FieldOffset(0)]
+			internal decimal Decimal;
+
 			[FieldOffset(0)]
 			internal Guid Guid;
 

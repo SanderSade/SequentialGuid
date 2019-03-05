@@ -12,7 +12,7 @@ namespace Sander.SequentialGuid
 		/// <summary>
 		///     Convert GUID to BigInteger
 		/// </summary>
-		public static BigInteger AsBigInteger(this Guid guid) =>
+		public static BigInteger ToBigInteger(this Guid guid) =>
 			new BigInteger(guid.ToByteArray());
 
 
@@ -27,29 +27,29 @@ namespace Sander.SequentialGuid
 		/// <summary>
 		///     Convert GUID to decimal
 		/// </summary>
-		public static decimal AsDecimal(this Guid guid) =>
-			GuidToDecimalConverter.GuidToDecimal(guid);
+		public static decimal ToDecimal(this Guid guid) =>
+			GuidConverter.GuidToDecimal(guid);
 
 
 		/// <summary>
 		///     Convert decimal to Guid
 		/// </summary>
 		public static Guid FromDecimal(decimal dec) =>
-			GuidToDecimalConverter.DecimalToGuid(dec);
+			GuidConverter.DecimalToGuid(dec);
 
 
 		/// <summary>
-		///     Convert GUID to pair of longs
+		///     Convert GUID to pair of Int64s
 		/// </summary>
-		public static (long, long) AsLongs(this Guid guid) =>
-			GuidToLongConverter.GuidToLongs(guid);
+		public static (long, long) ToLongs(this Guid guid) =>
+			GuidConverter.GuidToLongs(guid);
 
 
 		/// <summary>
 		///     Convert two longs to Guid
 		/// </summary>
 		public static Guid FromLongs(long first, long second) =>
-			GuidToLongConverter.LongsToGuid(first, second);
+			GuidConverter.LongsToGuid(first, second);
 
 
 		/// <summary>
@@ -58,7 +58,7 @@ namespace Sander.SequentialGuid
 		/// <para>Far faster and uses less memory than using guid-to-string</para>
 		/// </summary>
 		public static char GetCharacterAt(this Guid guid, int position)
-		{		
+		{
 			if (position < 0 || position > 31)
 				throw new ArgumentOutOfRangeException(nameof(position), position,
 					$"Position must be between 0 and 31, but received {position}");
@@ -89,21 +89,21 @@ namespace Sander.SequentialGuid
 					break;
 				case 7:
 					remap = 6;
-					break;				
+					break;
 			}
 
 			var guidByte = PrivateFieldProvider.GetByte(guid, remap);
 
 			//logic similar to https://github.com/dotnet/corefx/blob/7622efd2dbd363a632e00b6b95be4d990ea125de/src/Common/src/CoreLib/System/Guid.cs#L989,
 			//but we're using nibble and not full byte
-			var nibbleByte = (position % 2 == 0 ? (guidByte & 0xF0) >> 4 : guidByte & 0x0F) & 0xf;			
+			var nibbleByte = (position % 2 == 0 ? (guidByte & 0xF0) >> 4 : guidByte & 0x0F) & 0xf;
 			return (char)(nibbleByte > 9 ? nibbleByte + 107 : nibbleByte + 48);
 		}
 
 		/// <summary>
 		/// Get byte from GUID without converting GUID to byte array. Position is the native position of the byte in GUID structure (0..15)
 		/// <para>This is very slightly faster than using Guid.ToByteArray(), but uses far less memory</para>
-		/// </summary>		
+		/// </summary>
 		public static byte GetByteAt(this Guid guid, int position)
 		{
 			if (position < 0 || position > 15)
