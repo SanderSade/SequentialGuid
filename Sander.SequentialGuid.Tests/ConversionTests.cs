@@ -10,11 +10,14 @@ namespace Sander.SequentialGuid.Tests
 		[TestMethod]
 		public void BigIntegerTest()
 		{
-			var guid = Guid.NewGuid();
-			var bigInt = guid.ToBigInteger();
-			Trace.WriteLine($"{guid}: {bigInt}");
-			var revert = GuidHelper.FromBigInteger(bigInt);
-			Assert.AreEqual(guid, revert);
+			for (var j = 0; j < 1000; j++)
+			{
+				var guid = Guid.NewGuid();
+				var bigInt = guid.ToBigInteger();
+				Trace.WriteLine($"{guid}: {bigInt}");
+				var revert = GuidHelper.FromBigInteger(bigInt);
+				Assert.AreEqual(guid, revert);
+			}
 		}
 
 		[TestMethod]
@@ -42,11 +45,15 @@ namespace Sander.SequentialGuid.Tests
 		[TestMethod]
 		public void DecimalTest()
 		{
-			var guid = Guid.NewGuid();
-			var dec = guid.ToDecimal();
-			Trace.WriteLine($"{guid}: {dec}");
-			var revert = GuidHelper.FromDecimal(dec);
-			Assert.AreEqual(guid, revert);
+			for (var j = 0; j < 1000; j++)
+			{
+				var guid = Guid.NewGuid();
+				var dec = guid.ToDecimal();
+				Trace.WriteLine($"{guid}: {dec}");
+				var revert = GuidHelper.FromDecimal(dec);
+				Assert.AreEqual(guid, revert);
+
+			}
 		}
 
 		[TestMethod]
@@ -84,43 +91,49 @@ namespace Sander.SequentialGuid.Tests
 		[TestMethod]
 		public void Int64Test()
 		{
-			var guid = Guid.NewGuid();
-			var longs = guid.ToLongs();
-			Trace.WriteLine($"{guid}: {longs.Item1}, {longs.Item2}");
-			var revert = GuidHelper.FromLongs(longs.Item1, longs.Item2);
-			Assert.AreEqual(guid, revert);
+			for (var j = 0; j < 1000; j++)
+			{
+				var guid = Guid.NewGuid();
+				var longs = guid.ToLongs();
+				Trace.WriteLine($"{guid}: {longs.Item1}, {longs.Item2}");
+				var revert = GuidHelper.FromLongs(longs.Item1, longs.Item2);
+				Assert.AreEqual(guid, revert);
+			}
 		}
 
-		[TestMethod]
-		public void Int64MaxTest()
-		{
-			var guid = GuidHelper.FromLongs(long.MaxValue, long.MaxValue);
-			Trace.WriteLine(guid);
-		}
+		//[TestMethod]
+		//public void Int64MaxTest()
+		//{
+		//	var guid = GuidHelper.FromLongs(long.MaxValue, long.MaxValue);
+		//	Trace.WriteLine(guid);
+		//}
 
 
-		[TestMethod]
-		public void Int64OverflowTest()
-		{
-			var guid = GuidHelper.MaxValue;
-			var longs = guid.ToLongs();
+		//[TestMethod]
+		//public void Int64OverflowTest()
+		//{
+		//	var guid = GuidHelper.MaxValue;
+		//	var longs = guid.ToLongs();
 
-			Trace.WriteLine($"{longs.Item1}.{longs.Item2} {guid}");
-		}
+		//	Trace.WriteLine($"{longs.Item1}.{longs.Item2} {guid}");
+		//}
 
 		[TestMethod]
 		public void GetCharacterTest()
 		{
-			var guid = Guid.NewGuid();
-			var guidString = guid.ToString("N");
-			Trace.WriteLine(guid);
-			Trace.WriteLine(guidString);
-			for (var i = 0; i < 32; i++)
+			for (var j = 0; j < 1000; j++)
 			{
-				var c = guid.GetCharacterAt(i);
-				var s = guidString[i];
-				Trace.Write($"{s}:{c}.");
-				Assert.AreEqual(s, c);
+				var guid = Guid.NewGuid();
+				var guidString = guid.ToString("N");
+				Trace.WriteLine(guid);
+				Trace.WriteLine(guidString);
+				for (var i = 0; i < 32; i++)
+				{
+					var c = guid.GetCharacterAt(i);
+					var s = guidString[i];
+					Trace.Write($"{s}:{c}.");
+					Assert.AreEqual(s, c);
+				}
 			}
 		}
 
@@ -128,15 +141,18 @@ namespace Sander.SequentialGuid.Tests
 		[TestMethod]
 		public void GetByteTest()
 		{
-			var guid = Guid.NewGuid();
-			var byteArray = guid.ToByteArray();
-			Trace.WriteLine(guid);
-			for (var i = 0; i < 16; i++)
+			for (var j = 0; j < 1000; j++)
 			{
-				var a = guid.GetByteAt(i);
-				var s = byteArray[i];
-				Trace.Write($"{s}:{a}.");
-				Assert.AreEqual(s, a);
+				var guid = Guid.NewGuid();
+				var byteArray = guid.ToByteArray();
+				Trace.WriteLine(guid);
+				for (var i = 0; i < 16; i++)
+				{
+					var a = guid.GetByteAt(i);
+					var s = byteArray[i];
+					Trace.Write($"{s}:{a}.");
+					Assert.AreEqual(s, a);
+				}
 			}
 		}
 	}

@@ -17,8 +17,20 @@ namespace Sander.SequentialGuid
 		/// <summary>
 		///     Convert GUID to BigInteger
 		/// </summary>
-		public static BigInteger ToBigInteger(this Guid guid) =>
-			new BigInteger(guid.ToByteArray());
+		public static BigInteger ToBigInteger(this Guid guid)
+		{
+			var bytes = guid.ToByteArray();
+			//[...] the most significant bit of the last element in the byte array.
+			//This bit is set (the value of the byte is 0xFF) if the array is created from a negative BigInteger value. The bit is not set (the value of the byte is zero)
+			// To prevent positive values from being misinterpreted as negative values, you can add a zero-byte value to the end of the array.
+			//from https://docs.microsoft.com/en-us/dotnet/api/system.numerics.biginteger.-ctor?view=netframework-4.7.2#System_Numerics_BigInteger__ctor_System_Byte___
+			if (bytes[15] == 0xFF)
+			{
+				Array.Resize(ref bytes, 17);
+				bytes[16] = 0x00;
+			}
+			return new BigInteger(bytes);
+		}
 
 
 		/// <summary>
@@ -31,7 +43,7 @@ namespace Sander.SequentialGuid
 			var byteArray = integer.ToByteArray();
 			//GUID can only be initialized from 16-byte array,
 			//but BigInteger can be a single byte
-			//or more than 16 bytes...
+			//or more than 16 bytes - see also comment on ToBigInteger()
 			if (byteArray.Length != 16)
 				Array.Resize(ref byteArray, 16);
 			return new Guid(byteArray);
