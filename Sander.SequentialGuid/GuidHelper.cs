@@ -10,6 +10,11 @@ namespace Sander.SequentialGuid
 	public static class GuidHelper
 	{
 		/// <summary>
+		/// Opposite of Guid.Empty - returns ffffffff-ffff-ffff-ffff-ffffffffffff
+		/// </summary>
+		public static Guid MaxValue => new Guid("ffffffffffffffffffffffffffffffff");
+
+		/// <summary>
 		///     Convert GUID to BigInteger
 		/// </summary>
 		public static BigInteger ToBigInteger(this Guid guid) =>
@@ -52,16 +57,21 @@ namespace Sander.SequentialGuid
 		///     Convert GUID to pair of Int64s, sometimes used in languages without native GUID implementation (Javascript)
 		/// <para>Note that two longs cannot hold GUID larger than ffffffff-ffff-7fff-ffff-ffffffffff7f, but that shouldn't be issue in most realistic use cases</para>
 		/// </summary>
-		public static (long, long) ToLongs(this Guid guid) =>
-			GuidConverter.GuidToLongs(guid);
+		public static (long, long) ToLongs(this Guid guid)
+		{
+			GuidConverter.GuidToInt64(guid, out var first, out var second);
+			return (first, second);
+		}
 
 
 		/// <summary>
 		///     Convert two longs to Guid
 		/// <para>Note that two longs cannot hold GUID larger than ffffffff-ffff-7fff-ffff-ffffffffff7f, but that shouldn't be issue in most realistic use cases</para>
 		/// </summary>
-		public static Guid FromLongs(long first, long second) =>
-			GuidConverter.LongsToGuid(first, second);
+		public static Guid FromLongs(long first, long second)
+		{
+			return GuidConverter.GuidFromInt64(first, second);
+		}
 
 
 		/// <summary>

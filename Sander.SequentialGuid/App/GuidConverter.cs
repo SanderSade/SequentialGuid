@@ -1,54 +1,40 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 
 namespace Sander.SequentialGuid.App
 {
 	/// <summary>
-	/// Based on https://stackoverflow.com/a/3563872/3248515
 	/// </summary>
 	internal static class GuidConverter
 	{
-		private static GuidConverterStruct _converter;
-
-		internal static Guid DecimalToGuid(decimal dec)
+		internal static unsafe Guid DecimalToGuid(decimal dec)
 		{
-			_converter.Decimal = dec;
-			return _converter.Guid;
+			return *(Guid*)(void*)&dec;
 		}
 
-		internal static decimal GuidToDecimal(Guid guid)
+		internal static unsafe decimal GuidToDecimal(Guid guid)
 		{
-			_converter.Guid = guid;
-			return _converter.Decimal;
+			return *(decimal*)(void*)&guid;
 		}
 
-		internal static (long, long) GuidToLongs(Guid guid)
+		/// <summary>
+		///     From https://stackoverflow.com/a/49380620/3248515
+		/// </summary>
+		internal static unsafe void GuidToInt64(Guid value, out long x, out long y)
 		{
-			_converter.Guid = guid;
-			return (_converter.Long1, _converter.Long2);
+			var ptr = (long*)&value;
+			x = *ptr++;
+			y = *ptr;
 		}
 
-		internal static Guid LongsToGuid(long a, long b)
+		/// <summary>
+		///     From https://stackoverflow.com/a/49380620/3248515
+		/// </summary>
+		internal static unsafe Guid GuidFromInt64(long x, long y)
 		{
-			_converter.Long1 = a;
-			_converter.Long2 = b;
-			return _converter.Guid;
-		}
-
-		[StructLayout(LayoutKind.Explicit)]
-		private struct GuidConverterStruct
-		{
-			[FieldOffset(0)]
-			internal decimal Decimal;
-
-			[FieldOffset(0)]
-			internal Guid Guid;
-
-			[FieldOffset(0)]
-			internal long Long1;
-
-			[FieldOffset(8)]
-			internal long Long2;
+			var ptr = stackalloc long[2];
+			ptr[0] = x;
+			ptr[1] = y;
+			return *(Guid*)ptr;
 		}
 	}
 }

@@ -12,21 +12,27 @@ namespace Sander.SequentialGuid
 	/// </summary>
 	public class SequentialGuid
 	{
+		private readonly int _step;
 		private readonly object _lock = new object();
 		private BigInteger _guidInteger;
 
 		/// <summary>
-		///     Creates a sequential GUID based on random GUID
+		///     Creates a sequential GUID based on random GUID, optionally defining step
+		/// <para>Step can be negative, and defaults to 1</para>
 		/// </summary>
-		public SequentialGuid() : this(Guid.NewGuid())
+		public SequentialGuid(int step = 1) : this(Guid.NewGuid(), step)
 		{
 		}
 
 		/// <summary>
-		///     Create sequential GUID from existing GUID
+		///     Create sequential GUID from existing GUID, optionally defining step
+		/// <para>Step can be negative, and defaults to 1</para>
 		/// </summary>
-		public SequentialGuid(Guid originalGuid) =>
+		public SequentialGuid(Guid originalGuid, int step = 1)
+		{
+			_step = step;
 			_guidInteger = originalGuid.ToBigInteger();
+		}
 
 		/// <summary>
 		///     Return next sequential value of GUID
@@ -35,7 +41,7 @@ namespace Sander.SequentialGuid
 		{
 			lock (_lock)
 			{
-				_guidInteger++;
+				_guidInteger += _step;
 				return GuidHelper.FromBigInteger(_guidInteger);
 			}
 		}
@@ -43,11 +49,14 @@ namespace Sander.SequentialGuid
 		/// <summary>
 		/// Get the current value of the sequential GUID
 		/// </summary>
-		public Guid Current()
+		public Guid Current
 		{
-			lock (_lock)
+			get
 			{
-				return GuidHelper.FromBigInteger(_guidInteger);
+				lock (_lock)
+				{
+					return GuidHelper.FromBigInteger(_guidInteger);
+				}
 			}
 		}
 	}

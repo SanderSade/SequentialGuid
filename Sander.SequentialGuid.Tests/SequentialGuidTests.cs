@@ -44,9 +44,9 @@ namespace Sander.SequentialGuid.Tests
 		{
 			var guid = Guid.NewGuid();
 			var sequential = new SequentialGuid(guid);
-			Assert.AreEqual(guid, sequential.Current());
+			Assert.AreEqual(guid, sequential.Current);
 			sequential.Next();
-			Assert.AreNotEqual(guid, sequential.Current());
+			Assert.AreNotEqual(guid, sequential.Current);
 		}
 	}
 }
