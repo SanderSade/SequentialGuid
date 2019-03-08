@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8B86DE31
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PerformanceTests", "Tests\PerformanceTests\PerformanceTests.csproj", "{FF9B0931-4296-4AEF-9CDD-C9142CF969D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sander.SequentialGuid.Tests", "Sander.SequentialGuid.Tests\Sander.SequentialGuid.Tests.csproj", "{B3167095-8310-4D52-9DF3-82EDA626F8D3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sander.SequentialGuid.Tests", "Tests\Sander.SequentialGuid.Tests\Sander.SequentialGuid.Tests.csproj", "{B3167095-8310-4D52-9DF3-82EDA626F8D3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{9E1D0E5B-636B-41A1-96A1-3169F0E28E55}"
 	ProjectSection(SolutionItems) = preProject

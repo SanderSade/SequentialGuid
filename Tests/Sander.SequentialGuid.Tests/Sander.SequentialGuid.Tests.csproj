@@ -58,7 +58,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sander.SequentialGuid\Sander.SequentialGuid.csproj">
+    <ProjectReference Include="..\..\Sander.SequentialGuid\Sander.SequentialGuid.csproj">
       <Project>{7903fcc8-d059-483d-814a-7a615849892b}</Project>
       <Name>Sander.SequentialGuid</Name>
     </ProjectReference>
