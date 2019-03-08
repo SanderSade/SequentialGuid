@@ -14,10 +14,14 @@ namespace Sander.SequentialGuid.Tests
 			var guid = Guid.Empty;
 			Trace.WriteLine(guid.ToBigInteger());
 			var sequential = new SequentialGuid(guid);
-			var next = sequential.Next();
-			Trace.WriteLine($"{guid}:{next}");
-			var bi = next.ToBigInteger();
-			Assert.AreEqual(1, bi);
+			for (var i = 1; i < 100000; i++)
+			{
+				var next = sequential.Next();
+				var bi = next.ToBigInteger();
+				Trace.WriteLine($"{bi}:{next}");
+				Assert.AreEqual(i, bi);
+			}
+
 		}
 
 		[TestMethod]
@@ -47,6 +51,25 @@ namespace Sander.SequentialGuid.Tests
 			Assert.AreEqual(guid, sequential.Current);
 			sequential.Next();
 			Assert.AreNotEqual(guid, sequential.Current);
+		}
+
+
+
+		[TestMethod]
+		public void NegativeStepTest()
+		{
+			var guid = Guid.NewGuid();
+			var original = guid.ToBigInteger();
+			Trace.WriteLine(original);
+			var sequential = new SequentialGuid(guid, -1);
+			for (var i = 1; i < 100000; i++)
+			{
+				var next = sequential.Next();
+				var bi = next.ToBigInteger();
+				Trace.WriteLine($"{bi}:{next}");
+				Assert.AreEqual(original - i, bi);
+			}
+
 		}
 	}
 }

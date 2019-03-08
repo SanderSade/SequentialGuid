@@ -22,8 +22,7 @@ namespace Sander.SequentialGuid
 		///     <para>Step can be negative, and defaults to 1</para>
 		///     <para>
 		///         Defaults to isPythonCompliant = true, as this is the more common use outside Microsoft/.NET.
-		///         E.g. compatible with http://guid-convert.appspot.com/ and Java UUID.
-		///         See also https://stackoverflow.com/questions/9195551/why-does-guid-tobytearray-order-the-bytes-the-way-it-does
+		///         E.g. compatible with http://guid-convert.appspot.com and Java UUID.
 		///     </para>
 		/// </summary>
 		public SequentialGuid(int step = 1, bool isPythonCompliant = true) : this(Guid.NewGuid(), step,
@@ -36,8 +35,7 @@ namespace Sander.SequentialGuid
 		///     <para>Step can be negative, and defaults to 1</para>
 		///     <para>
 		///         Defaults to isPythonCompliant = true, as this is the more common use outside Microsoft/.NET.
-		///         E.g. compatible with http://guid-convert.appspot.com/ and Java UUID.
-		///         See also https://stackoverflow.com/questions/9195551/why-does-guid-tobytearray-order-the-bytes-the-way-it-does
+		///         E.g. compatible with http://guid-convert.appspot.com and Java UUID.
 		///     </para>
 		/// </summary>
 		public SequentialGuid(Guid originalGuid, int step = 1, bool isPythonCompliant = true)

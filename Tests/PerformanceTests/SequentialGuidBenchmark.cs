@@ -9,7 +9,7 @@ namespace PerformanceTests
 	[ClrJob(true)]
 	public class SequentialGuidBenchmark
 	{
-		internal const int Count = 10000000;
+		internal const int Count = 10000;
 		private SequentialGuid _sequentialGuid;
 
 		[GlobalSetup]

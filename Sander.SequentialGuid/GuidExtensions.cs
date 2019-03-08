@@ -7,17 +7,17 @@ using Sander.SequentialGuid.App;
 namespace Sander.SequentialGuid
 {
 	/// <summary>
-	/// Extension methods for GUID
+	///     Extension methods for GUID
 	/// </summary>
 	public static class GuidExtensions
 	{
 		/// <summary>
 		///     Convert GUID to BigInteger
-		/// <para>
-		/// Defaults to isPythonCompliant = true, as this is the more common use outside Microsoft/.NET.
-		/// E.g. compatible with http://guid-convert.appspot.com/ and Java UUID.
-		/// See also https://stackoverflow.com/questions/9195551/why-does-guid-tobytearray-order-the-bytes-the-way-it-does
-		/// </para>
+		///     <para>
+		///         Defaults to isPythonCompliant = true, as this is the more common use outside Microsoft/.NET.
+		///         E.g. compatible with http://guid-convert.appspot.com and Java UUID.
+		///         See also https://stackoverflow.com/questions/9195551/why-does-guid-tobytearray-order-the-bytes-the-way-it-does
+		///     </para>
 		/// </summary>
 		public static BigInteger ToBigInteger(this Guid guid, bool isPythonCompliant = true)
 		{
@@ -39,7 +39,10 @@ namespace Sander.SequentialGuid
 
 		/// <summary>
 		///     Convert GUID to pair of Int64s, sometimes used in languages without native GUID implementation (Javascript)
-		/// <para>Note that two longs cannot hold GUID larger than ffffffff-ffff-7fff-ffff-ffffffffff7f, but that shouldn't be issue in most realistic use cases</para>
+		///     <para>
+		///         Note that two longs cannot hold GUID larger than ffffffff-ffff-7fff-ffff-ffffffffff7f, but that shouldn't be
+		///         issue in most realistic use cases
+		///     </para>
 		/// </summary>
 		public static (long, long) ToLongs(this Guid guid)
 		{
@@ -48,9 +51,9 @@ namespace Sander.SequentialGuid
 		}
 
 		/// <summary>
-		/// Get the hex character at the specified position (0..31).
-		/// Character is returned in lowercase
-		/// <para>Far faster and uses less memory than using guid-to-string</para>
+		///     Get the hex character at the specified position (0..31).
+		///     Character is returned in lowercase
+		///     <para>Far faster and uses less memory than using guid-to-string</para>
 		/// </summary>
 		public static char GetCharacterAt(this Guid guid, int position)
 		{
@@ -97,8 +100,9 @@ namespace Sander.SequentialGuid
 		}
 
 		/// <summary>
-		/// Get byte from GUID without converting GUID to byte array. Position is the native position of the byte in GUID structure (0..15)
-		/// <para>This is very slightly faster than using Guid.ToByteArray(), but uses far less memory</para>
+		///     Get byte from GUID without converting GUID to byte array. Position is the native position of the byte in GUID
+		///     structure on Windows/.NET (0..15)
+		///     <para>This is very slightly faster than using Guid.ToByteArray(), but uses far less memory</para>
 		/// </summary>
 		public static byte GetByteAt(this Guid guid, int position)
 		{
@@ -108,10 +112,13 @@ namespace Sander.SequentialGuid
 
 			return PrivateFieldProvider.GetByte(guid, position);
 		}
+
 		/// <summary>
-		/// Get GUID as byte array compatible with common use outside Microsoft/.NET.
-		/// <para>E.g. compatible with http://guid-convert.appspot.com/ and Java UUID.
-		/// See also https://stackoverflow.com/questions/9195551/why-does-guid-tobytearray-order-the-bytes-the-way-it-does </para>
+		///     Get GUID as byte array compatible with common use outside Microsoft/.NET.
+		///     <para>
+		///         E.g. compatible with http://guid-convert.appspot.com and Java UUID.
+		///         See also https://stackoverflow.com/questions/9195551/why-does-guid-tobytearray-order-the-bytes-the-way-it-does
+		///     </para>
 		/// </summary>
 		public static byte[] ToCompliantByteArray(this Guid guid)
 		{
@@ -119,16 +126,16 @@ namespace Sander.SequentialGuid
 
 			//idea from https://stackoverflow.com/a/50679960/3248515.
 			var byteList = new List<byte>(16)
-				{
-					bytes[6],
-					bytes[7],
-					bytes[4],
-					bytes[5],
-					bytes[0],
-					bytes[1],
-					bytes[2],
-					bytes[3]
-				};
+			{
+				bytes[6],
+				bytes[7],
+				bytes[4],
+				bytes[5],
+				bytes[0],
+				bytes[1],
+				bytes[2],
+				bytes[3]
+			};
 
 			byteList.InsertRange(0, bytes.Skip(8).Reverse());
 
