@@ -10,23 +10,36 @@ namespace PerformanceTests
 	public class SequentialGuidBenchmark
 	{
 		internal const int Count = 10000;
-		private SequentialGuid _sequentialGuid;
 
-		[GlobalSetup]
-		public void Setup() =>
-			_sequentialGuid = new SequentialGuid();
+
+
+		[Benchmark]
+		public List<Guid> SequentialCompliantTest()
+		{
+			var sequentialGuid = new SequentialGuid();
+			var result = new List<Guid>(Count);
+			for (var i = 0; i < Count; i++)
+			{
+				result.Add(sequentialGuid.Next());
+			}
+
+			return result;
+		}
 
 
 		[Benchmark]
 		public List<Guid> SequentialTest()
 		{
+			var sequentialGuid = new SequentialGuid(1, false);
 			var result = new List<Guid>(Count);
 			for (var i = 0; i < Count; i++)
 			{
-				result.Add(_sequentialGuid.Next());
+				result.Add(sequentialGuid.Next());
 			}
 
 			return result;
 		}
+
+
 	}
 }

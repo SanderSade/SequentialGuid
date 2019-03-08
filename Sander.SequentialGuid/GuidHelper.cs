@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using Sander.SequentialGuid.App;
 
@@ -71,7 +69,7 @@ namespace Sander.SequentialGuid
 		public static Guid FromCompliantByteArray(byte[] bytes)
 		{
 			if (bytes?.Length != 16)
-				throw new ArgumentOutOfRangeException(nameof(bytes), "Byte array lenth was not 16!");
+				throw new ArgumentOutOfRangeException(nameof(bytes), "Byte array must contain 16 bytes!");
 
 			var byteArray = new byte[16];
 
@@ -85,10 +83,8 @@ namespace Sander.SequentialGuid
 			byteArray[7] = bytes[9];
 			byteArray[8] = bytes[7];
 			byteArray[9] = bytes[6];
-
 			byteArray[10] = bytes[5];
 			byteArray[11] = bytes[4];
-
 			byteArray[12] = bytes[3];
 			byteArray[13] = bytes[2];
 			byteArray[14] = bytes[1];
