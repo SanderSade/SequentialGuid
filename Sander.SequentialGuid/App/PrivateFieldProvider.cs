@@ -68,12 +68,12 @@ namespace Sander.SequentialGuid.App
 			throw new ArgumentOutOfRangeException();
 		}
 
-		
+
 		private static Func<TGuid, TReturn> GetMethod<TGuid, TReturn>(string fieldName)
 		{
 			var field = typeof(Guid).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
 			Debug.Assert(field != null, nameof(field) + " != null");
-			Debug.Assert(field.ReflectedType != null, "field.ReflectedType != null");			
+			Debug.Assert(field.ReflectedType != null, "field.ReflectedType != null");
 			var dynamicMethod = new DynamicMethod(string.Empty,  typeof(TReturn), new[] { typeof(TGuid) }, true);
 			var ilGenerator = dynamicMethod.GetILGenerator();
 			ilGenerator.Emit(OpCodes.Ldarg_0);
