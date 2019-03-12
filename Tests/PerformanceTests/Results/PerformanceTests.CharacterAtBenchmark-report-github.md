@@ -1,3 +1,4 @@
+## Get character at the specified position, one million operations
 ``` ini
 
 BenchmarkDotNet=v0.11.4, OS=Windows 10.0.17763.316 (1809/October2018Update/Redstone5)

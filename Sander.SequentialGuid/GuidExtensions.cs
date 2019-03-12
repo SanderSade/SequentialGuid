@@ -14,14 +14,14 @@ namespace Sander.SequentialGuid
 		/// <summary>
 		///     Convert GUID to BigInteger
 		///     <para>
-		///         Defaults to isPythonCompliant = true, as this is the more common use outside Microsoft/.NET.
+		///         Defaults to isCompliant = true, as this is the more common use outside Microsoft/.NET.
 		///         E.g. compatible with Python or Java UUID, and http://guid-convert.appspot.com.
 		///         See also https://stackoverflow.com/questions/9195551/why-does-guid-tobytearray-order-the-bytes-the-way-it-does
 		///     </para>
 		/// </summary>
-		public static BigInteger ToBigInteger(this Guid guid, bool isPythonCompliant = true)
+		public static BigInteger ToBigInteger(this Guid guid, bool isCompliant = true)
 		{
-			var bytes = isPythonCompliant ? ToCompliantByteArray(guid) : guid.ToByteArray();
+			var bytes = isCompliant ? ToCompliantByteArray(guid) : guid.ToByteArray();
 
 			//[...] the most significant bit of the last element in the byte array.
 			//This bit is set (the value of the byte is 0xFF) if the array is created from a negative BigInteger value. The bit is not set (the value of the byte is zero)

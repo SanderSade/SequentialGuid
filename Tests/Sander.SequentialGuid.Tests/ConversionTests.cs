@@ -154,5 +154,22 @@ namespace Sander.SequentialGuid.Tests
 				}
 			}
 		}
+
+
+		[TestMethod]
+		public void CompliantByteArrayTest()
+		{
+			for (var i = 0; i < 1000; i++)
+			{
+				var guid = Guid.NewGuid();
+				var array = guid.ToCompliantByteArray();
+				var rev = new Guid(array);
+
+				Assert.AreNotEqual(guid, rev);
+				var byteRev = GuidHelper.FromCompliantByteArray(array);
+				Assert.AreEqual(guid, byteRev);
+			}
+		}
+
 	}
 }
