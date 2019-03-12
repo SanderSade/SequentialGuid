@@ -63,6 +63,7 @@ namespace Sander.SequentialGuid
 		/// </summary>
 		public Guid Next()
 		{
+			//about 1/3 of the time is spent on locking here...
 			lock (_lock)
 			{
 				//this is really non-elegant, rethink this!
