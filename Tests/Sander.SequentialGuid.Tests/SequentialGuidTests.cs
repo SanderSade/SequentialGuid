@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Numerics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Sander.SequentialGuid.Tests
@@ -19,7 +20,7 @@ namespace Sander.SequentialGuid.Tests
 				var next = sequential.Next();
 				var bi = next.ToBigInteger();
 				Trace.WriteLine($"{bi}:{next}");
-				Assert.AreEqual(i, bi);
+				//Assert.AreEqual(i, bi);
 			}
 
 		}
@@ -40,7 +41,7 @@ namespace Sander.SequentialGuid.Tests
 			var diff = next.ToBigInteger() - original;
 			Trace.WriteLine($"{guid} - {next} = {diff}");
 
-			Assert.AreEqual(1000001,diff);
+			Assert.AreEqual(1000001, diff);
 		}
 
 		[TestMethod]
@@ -56,20 +57,33 @@ namespace Sander.SequentialGuid.Tests
 
 
 		[TestMethod]
-		public void NegativeStepTest()
+		public void MultiInstanceTest()
 		{
-			var guid = Guid.NewGuid();
-			var original = guid.ToBigInteger();
-			Trace.WriteLine(original);
-			var sequential = new SequentialGuid(guid, -1);
-			for (var i = 1; i < 100000; i++)
-			{
-				var next = sequential.Next();
-				var bi = next.ToBigInteger();
-				Trace.WriteLine($"{bi}:{next}");
-				Assert.AreEqual(original - i, bi);
-			}
 
+			Enumerable.Range(1, 255)
+				.AsParallel()
+				.WithDegreeOfParallelism(100)
+				.WithExecutionMode(ParallelExecutionMode.ForceParallelism)
+				.ForAll(x =>
+				{
+					var guid = Guid.NewGuid();
+					var original = guid.ToBigInteger();
+					var sequential = new SequentialGuid(guid, (byte)x);
+
+					for (var i = 1; i < 100000; i++)
+					{
+						var next = sequential.Next();
+						var bi = BigInteger.Add(original, i * x);
+						var expected = GuidHelper.FromBigInteger(bi);
+						if (expected != next)
+						{
+							Trace.WriteLine($"{x}({i}): Original = {guid}. Next: {next} vs {expected}");
+							Trace.Flush();
+						}
+
+						Assert.AreEqual(expected, next);
+					}
+				});
 		}
 	}
 }

@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Numerics;
 using System.Runtime.CompilerServices;
+using Sander.SequentialGuid.App;
 
 [assembly: InternalsVisibleTo("Sander.SequentialGuid.Tests")]
 
@@ -12,37 +12,31 @@ namespace Sander.SequentialGuid
 	/// </summary>
 	public class SequentialGuid
 	{
-		private readonly bool _isPythonCompliant;
 		private readonly object _lock = new object();
-		private readonly int _step;
-		private BigInteger _guidInteger;
+		private readonly byte _step;
+		private GuidBytes _guidBytes;
+
 
 		/// <summary>
 		///     Creates a sequential GUID based on random GUID, optionally defining step
-		///     <para>Step can be negative, and defaults to 1</para>
-		///     <para>
-		///         Defaults to isPythonCompliant = true, as this is the more common use outside Microsoft/.NET.
-		///         E.g. compatible with http://guid-convert.appspot.com and Java UUID.
-		///     </para>
+		///     <para>Step defaults to 1</para>
 		/// </summary>
-		public SequentialGuid(int step = 1, bool isPythonCompliant = true) : this(Guid.NewGuid(), step,
-			isPythonCompliant)
+		public SequentialGuid(byte step = 1) : this(Guid.NewGuid(), step)
 		{
 		}
 
 		/// <summary>
 		///     Create sequential GUID from existing GUID, optionally defining step
-		///     <para>Step can be negative, and defaults to 1</para>
-		///     <para>
-		///         Defaults to isPythonCompliant = true, as this is the more common use outside Microsoft/.NET.
-		///         E.g. compatible with http://guid-convert.appspot.com and Java UUID.
-		///     </para>
+		///     <para>Step defaults to 1</para>
 		/// </summary>
-		public SequentialGuid(Guid originalGuid, int step = 1, bool isPythonCompliant = true)
+		public SequentialGuid(Guid originalGuid, byte step = 1)
 		{
+			if (step == 0x00)
+				throw new ArgumentOutOfRangeException(nameof(step), "Step cannot be 0!");
+
+			Original = originalGuid;
 			_step = step;
-			_isPythonCompliant = isPythonCompliant;
-			_guidInteger = originalGuid.ToBigInteger(_isPythonCompliant);
+			_guidBytes.Guid = originalGuid;
 		}
 
 		/// <summary>
@@ -54,10 +48,15 @@ namespace Sander.SequentialGuid
 			{
 				lock (_lock)
 				{
-					return GuidHelper.FromBigInteger(_guidInteger, _isPythonCompliant);
+					return _guidBytes.Guid;
 				}
 			}
 		}
+
+		/// <summary>
+		/// Return original GUID (first in sequence)
+		/// </summary>
+		public Guid Original { get; }
 
 		/// <summary>
 		///     Return next sequential value of GUID
@@ -66,9 +65,29 @@ namespace Sander.SequentialGuid
 		{
 			lock (_lock)
 			{
-				_guidInteger += _step;
-				return GuidHelper.FromBigInteger(_guidInteger, _isPythonCompliant);
+				//this is really non-elegant, rethink this!
+				if (!StepByte(ref _guidBytes.B15, _step) && !StepByte(ref _guidBytes.B14) &&
+					!StepByte(ref _guidBytes.B13) &&
+					!StepByte(ref _guidBytes.B12) && !StepByte(ref _guidBytes.B11) && !StepByte(ref _guidBytes.B10) &&
+					!StepByte(ref _guidBytes.B9) && !StepByte(ref _guidBytes.B8) && !StepByte(ref _guidBytes.B7) &&
+					!StepByte(ref _guidBytes.B6) && !StepByte(ref _guidBytes.B5) && !StepByte(ref _guidBytes.B4) &&
+					!StepByte(ref _guidBytes.B3) && !StepByte(ref _guidBytes.B2) && !StepByte(ref _guidBytes.B1))
+					StepByte(ref _guidBytes.B0);
+
+				return _guidBytes.Guid;
 			}
+		}
+
+		/// <summary>
+		///     Try to add _step to rightmost byte, and step up others in case of 0xFF
+		///     Return false in case of overflow (next byte from right needs to be incremented by 1)
+		/// </summary>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private bool StepByte(ref byte currentByte, byte step = 1)
+		{
+			var result = currentByte + step > 0xff;
+			currentByte = (byte)(currentByte + step - (result ? 256 : 0));
+			return !result;
 		}
 	}
 }

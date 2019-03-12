@@ -9,28 +9,13 @@ namespace PerformanceTests
 	[ClrJob(true)]
 	public class SequentialGuidBenchmark
 	{
-		internal const int Count = 10000;
-
-
-
-		[Benchmark]
-		public List<Guid> SequentialCompliantTest()
-		{
-			var sequentialGuid = new SequentialGuid();
-			var result = new List<Guid>(Count);
-			for (var i = 0; i < Count; i++)
-			{
-				result.Add(sequentialGuid.Next());
-			}
-
-			return result;
-		}
+		internal const int Count = 100000;
 
 
 		[Benchmark]
 		public List<Guid> SequentialTest()
 		{
-			var sequentialGuid = new SequentialGuid(1, false);
+			var sequentialGuid = new SequentialGuid(1);
 			var result = new List<Guid>(Count);
 			for (var i = 0; i < Count; i++)
 			{
