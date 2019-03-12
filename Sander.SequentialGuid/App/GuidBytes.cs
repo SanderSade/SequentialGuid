@@ -60,6 +60,9 @@ namespace Sander.SequentialGuid.App
 		[FieldOffset(15)]
 		internal byte B15;
 
+		/// <summary>
+		/// Get "Microsoft" byte position
+		/// </summary>
 		internal byte GetByteAt(int position)
 		{
 			switch (position)
