@@ -54,7 +54,7 @@ namespace Sander.SequentialGuid
 		}
 
 		/// <summary>
-		/// Return original GUID (first in sequence)
+		///     Returns the original, initial GUID (first in sequence)
 		/// </summary>
 		public Guid Original { get; }
 
@@ -66,13 +66,23 @@ namespace Sander.SequentialGuid
 			lock (_lock)
 			{
 				//this is really non-elegant, rethink this!
-				if (!StepByte(ref _guidBytes.B15, _step) && !StepByte(ref _guidBytes.B14) &&
-					!StepByte(ref _guidBytes.B13) &&
-					!StepByte(ref _guidBytes.B12) && !StepByte(ref _guidBytes.B11) && !StepByte(ref _guidBytes.B10) &&
-					!StepByte(ref _guidBytes.B9) && !StepByte(ref _guidBytes.B8) && !StepByte(ref _guidBytes.B7) &&
-					!StepByte(ref _guidBytes.B6) && !StepByte(ref _guidBytes.B5) && !StepByte(ref _guidBytes.B4) &&
-					!StepByte(ref _guidBytes.B3) && !StepByte(ref _guidBytes.B2) && !StepByte(ref _guidBytes.B1))
-					StepByte(ref _guidBytes.B0);
+				if (!StepByte(ref _guidBytes.B15, _step) &&
+				    !StepByte(ref _guidBytes.B14) &&
+				    !StepByte(ref _guidBytes.B13) &&
+				    !StepByte(ref _guidBytes.B12) &&
+				    !StepByte(ref _guidBytes.B11) &&
+				    !StepByte(ref _guidBytes.B10) &&
+				    !StepByte(ref _guidBytes.B9) &&
+				    !StepByte(ref _guidBytes.B8) &&
+				    !StepByte(ref _guidBytes.B7) &&
+				    !StepByte(ref _guidBytes.B6) &&
+				    !StepByte(ref _guidBytes.B5) &&
+				    !StepByte(ref _guidBytes.B4) &&
+				    !StepByte(ref _guidBytes.B3) &&
+				    !StepByte(ref _guidBytes.B2) &&
+				    !StepByte(ref _guidBytes.B1) &&
+				    !StepByte(ref _guidBytes.B0))
+					throw new OverflowException("Cannot increase the GUID anymore. Maximum value reached");
 
 				return _guidBytes.Guid;
 			}
@@ -83,7 +93,7 @@ namespace Sander.SequentialGuid
 		///     Return false in case of overflow (next byte from right needs to be incremented by 1)
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private bool StepByte(ref byte currentByte, byte step = 1)
+		private static bool StepByte(ref byte currentByte, byte step = 1)
 		{
 			var result = currentByte + step > 0xff;
 			currentByte = (byte)(currentByte + step - (result ? 256 : 0));

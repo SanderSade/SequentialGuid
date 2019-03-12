@@ -6,15 +6,11 @@ namespace Sander.SequentialGuid.App
 	/// </summary>
 	internal static class GuidConverter
 	{
-		internal static unsafe Guid DecimalToGuid(decimal dec)
-		{
-			return *(Guid*)(void*)&dec;
-		}
+		internal static unsafe Guid DecimalToGuid(decimal dec) =>
+			*(Guid*)(void*)&dec;
 
-		internal static unsafe decimal GuidToDecimal(Guid guid)
-		{
-			return *(decimal*)(void*)&guid;
-		}
+		internal static unsafe decimal GuidToDecimal(Guid guid) =>
+			*(decimal*)(void*)&guid;
 
 		/// <summary>
 		///     From https://stackoverflow.com/a/49380620/3248515

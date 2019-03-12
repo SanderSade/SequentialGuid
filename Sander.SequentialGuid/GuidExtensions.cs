@@ -15,7 +15,7 @@ namespace Sander.SequentialGuid
 		///     Convert GUID to BigInteger
 		///     <para>
 		///         Defaults to isPythonCompliant = true, as this is the more common use outside Microsoft/.NET.
-		///         E.g. compatible with http://guid-convert.appspot.com and Java UUID.
+		///         E.g. compatible with Python or Java UUID, and http://guid-convert.appspot.com.
 		///         See also https://stackoverflow.com/questions/9195551/why-does-guid-tobytearray-order-the-bytes-the-way-it-does
 		///     </para>
 		/// </summary>
@@ -38,10 +38,10 @@ namespace Sander.SequentialGuid
 
 
 		/// <summary>
-		///     Convert GUID to pair of Int64s, sometimes used in languages without native GUID implementation (Javascript)
+		///     Convert GUID to pair of Int64s, sometimes used in languages without native GUID/UUID implementation (Javascript)
 		///     <para>
-		///         Note that two longs cannot hold GUID larger than ffffffff-ffff-7fff-ffff-ffffffffff7f, but that shouldn't be
-		///         issue in most realistic use cases
+		///         Note that two longs cannot hold GUID larger than ffffffff-ffff-7fff-ffff-ffffffffff7f,
+		///         but that shouldn't be an issue in most realistic use cases
 		///     </para>
 		/// </summary>
 		public static (long, long) ToLongs(this Guid guid)
@@ -116,7 +116,7 @@ namespace Sander.SequentialGuid
 		/// <summary>
 		///     Get GUID as byte array compatible with common use outside Microsoft/.NET.
 		///     <para>
-		///         E.g. compatible with http://guid-convert.appspot.com and Java UUID.
+		///         E.g. compatible with Python or Java UUID, and http://guid-convert.appspot.com.
 		///         See also https://stackoverflow.com/questions/9195551/why-does-guid-tobytearray-order-the-bytes-the-way-it-does
 		///     </para>
 		/// </summary>

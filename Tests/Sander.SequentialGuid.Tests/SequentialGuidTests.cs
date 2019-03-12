@@ -54,7 +54,15 @@ namespace Sander.SequentialGuid.Tests
 			Assert.AreNotEqual(guid, sequential.Current);
 		}
 
-
+		[TestMethod]
+		public void OriginalTest()
+		{
+			var guid = Guid.NewGuid();
+			var sequential = new SequentialGuid(guid);
+			Assert.AreEqual(guid, sequential.Original);
+			sequential.Next();
+			Assert.AreNotEqual(sequential.Original, sequential.Current);
+		}
 
 		[TestMethod]
 		public void MultiInstanceTest()
@@ -85,5 +93,29 @@ namespace Sander.SequentialGuid.Tests
 					}
 				});
 		}
+
+
+		[TestMethod]
+		[ExpectedException(typeof(OverflowException))]
+		public void OverFlowTest()
+		{
+			var guid = GuidHelper.MaxValue;
+			var sequential = new SequentialGuid(guid);
+			sequential.Next();
+		}
+
+
+		[TestMethod]
+		public void AlmostOverFlowTest()
+		{
+			var guid = GuidHelper.MaxValue;
+			var bi = guid.ToBigInteger() - 1;
+			var almostMax = GuidHelper.FromBigInteger(bi);
+			var sequential = new SequentialGuid(almostMax);
+			var next = sequential.Next();
+			Trace.WriteLine($"{almostMax}: {next}");
+			Assert.AreEqual(guid, next);
+		}
+
 	}
 }

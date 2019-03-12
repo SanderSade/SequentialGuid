@@ -6,7 +6,7 @@ using System.Reflection.Emit;
 namespace Sander.SequentialGuid.App
 {
 	/// <summary>
-	/// Naive "get private field value" implementation
+	///     Naive "get private field value" implementation
 	/// </summary>
 	internal static class PrivateFieldProvider
 	{
@@ -65,6 +65,7 @@ namespace Sander.SequentialGuid.App
 				case 14: return GetJ.Value.Invoke(guid);
 				case 15: return GetK.Value.Invoke(guid);
 			}
+
 			throw new ArgumentOutOfRangeException();
 		}
 
@@ -74,7 +75,7 @@ namespace Sander.SequentialGuid.App
 			var field = typeof(Guid).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
 			Debug.Assert(field != null, nameof(field) + " != null");
 			Debug.Assert(field.ReflectedType != null, "field.ReflectedType != null");
-			var dynamicMethod = new DynamicMethod(string.Empty,  typeof(TReturn), new[] { typeof(TGuid) }, true);
+			var dynamicMethod = new DynamicMethod(string.Empty, typeof(TReturn), new[] {typeof(TGuid)}, true);
 			var ilGenerator = dynamicMethod.GetILGenerator();
 			ilGenerator.Emit(OpCodes.Ldarg_0);
 			ilGenerator.Emit(OpCodes.Ldfld, field);

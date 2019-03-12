@@ -24,7 +24,7 @@ namespace Sander.SequentialGuid
 		///     </para>
 		///     <para>
 		///         Defaults to isPythonCompliant = true, as this is the more common use outside Microsoft/.NET.
-		///         E.g. compatible with http://guid-convert.appspot.com and Java UUID.
+		///         E.g. compatible with Python or Java UUID, and http://guid-convert.appspot.com.
 		///         See also https://stackoverflow.com/questions/9195551/why-does-guid-tobytearray-order-the-bytes-the-way-it-does
 		///     </para>
 		/// </summary>
