@@ -1,4 +1,4 @@
-## Sequential GUID, 100 000 steps
+## Sequential GUID generation, 25 million steps
 
 ``` ini
 
@@ -10,8 +10,8 @@ Intel Core i7-8650U CPU 1.90GHz (Kaby Lake R), 1 CPU, 4 logical and 4 physical c
 Job=Clr  Runtime=Clr  
 
 ```
-|               Method |     Mean |     Error |    StdDev | Ratio | Gen 0/1k Op | Gen 1/1k Op | Gen 2/1k Op | Allocated Memory/Op |
-|--------------------- |---------:|----------:|----------:|------:|------------:|------------:|------------:|--------------------:|
-|       SequentialTest | 3.833 ms | 0.0763 ms | 0.1396 ms |  1.00 |    332.0313 |    332.0313 |    332.0313 |             1.53 MB |
-|                      |          |           |           |       |             |             |             |                     |
-| NativeSequentialTest | 3.427 ms | 0.0193 ms | 0.0171 ms |  1.00 |    328.1250 |    328.1250 |    328.1250 |             1.53 MB |
+|               Method |     Mean |    Error |   StdDev | Ratio | Gen 0/1k Op | Gen 1/1k Op | Gen 2/1k Op | Allocated Memory/Op |
+|--------------------- |---------:|---------:|---------:|------:|------------:|------------:|------------:|--------------------:|
+|       SequentialTest | 945.0 ms | 18.20 ms | 23.67 ms |  1.00 |           - |           - |           - |           381.48 MB |
+|                      |          |          |          |       |             |             |             |                     |
+| NativeSequentialTest | 866.4 ms | 17.11 ms | 16.00 ms |  1.00 |           - |           - |           - |           381.48 MB |
