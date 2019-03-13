@@ -90,14 +90,14 @@ namespace Sander.SequentialGuid
 		}
 
 		/// <summary>
-		///     Try to add _step to rightmost byte, and step up others in case of 0xFF
+		///     Try to add step to rightmost byte, and step up others in case of 0xFF
 		///     Return false in case of overflow (next byte from right needs to be incremented by 1)
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static bool StepByte(ref byte currentByte, byte step = 1)
 		{
 			var result = currentByte + step > 0xff;
-			currentByte = (byte)(currentByte + step - (result ? 256 : 0));
+			currentByte = (byte)(currentByte + step);
 			return !result;
 		}
 	}

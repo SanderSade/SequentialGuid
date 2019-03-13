@@ -5,7 +5,7 @@
 
 By default, [GUIDs](https://en.wikipedia.org/wiki/Universally_unique_identifier) are not alphanumerically continuous or sortable in a meaningful way.
 
-A very common use for GUID is a primary key column in the database - but with non-sequential GUIDs, it is not optimal to have the primary key as a [clustered index](https://docs.microsoft.com/en-us/sql/relational-databases/indexes/clustered-and-nonclustered-indexes-described?view=sql-server-2017). Using clustered index with nonsequential GUIDs can cause fragmentation and general performance issues.
+A very common use for GUID is a primary key in the database - but with non-sequential GUIDs, it is not optimal to have the primary key as a [clustered index](https://docs.microsoft.com/en-us/sql/relational-databases/indexes/clustered-and-nonclustered-indexes-described?view=sql-server-2017). Using clustered index with nonsequential GUIDs can cause fragmentation and general performance issues.
 
 To resolve this, SQL Server has [NEWSEQUENTIALID](https://docs.microsoft.com/en-us/sql/t-sql/functions/newsequentialid-transact-sql?view=sql-server-ver15), which creates alphanumerically sortable, sequential GUIDs. The downside ot this approach is that the application will have to wait the SQL Server to create the primary key before the entry becomes usable - and of course, there are other database engines that do not have similar functionality.
 
