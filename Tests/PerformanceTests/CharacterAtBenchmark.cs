@@ -10,7 +10,7 @@ namespace PerformanceTests
 	public class CharacterAtBenchmark
 	{
 		private List<Guid> _guids;
-		internal const int Count = 1000000;
+		internal const int Count = 25_000_000;
 
 
 		[GlobalSetup]
