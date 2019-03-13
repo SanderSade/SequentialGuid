@@ -91,7 +91,7 @@ namespace Sander.SequentialGuid
 					break;
 			}
 
-			var guidByte = PrivateFieldProvider.GetByte(guid, remap);
+			var guidByte = new GuidBytes {Guid = guid}.GetByteAt(remap);
 
 			//logic similar to https://github.com/dotnet/corefx/blob/7622efd2dbd363a632e00b6b95be4d990ea125de/src/Common/src/CoreLib/System/Guid.cs#L989,
 			//but we're using nibble and not full byte
@@ -102,16 +102,10 @@ namespace Sander.SequentialGuid
 		/// <summary>
 		///     Get byte from GUID without converting GUID to byte array. Position is the native position of the byte in GUID
 		///     structure on Windows/.NET (0..15)
-		///     <para>This is very slightly faster than using Guid.ToByteArray(), but uses far less memory</para>
+		///     <para>This is very slightly faster than using Guid.ToByteArray()[position], but uses far less memory</para>
 		/// </summary>
-		public static byte GetByteAt(this Guid guid, int position)
-		{
-			if (position < 0 || position > 15)
-				throw new ArgumentOutOfRangeException(nameof(position), position,
-					$"Position must be between 0 and 15, but received {position}");
-
-			return PrivateFieldProvider.GetByte(guid, position);
-		}
+		public static byte GetByteAt(this Guid guid, int position) =>
+			new GuidBytes { Guid = guid }.GetByteAt(position);
 
 		/// <summary>
 		///     Get GUID as byte array compatible with common use outside Microsoft/.NET.

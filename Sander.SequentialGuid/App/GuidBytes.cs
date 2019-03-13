@@ -67,14 +67,14 @@ namespace Sander.SequentialGuid.App
 		{
 			switch (position)
 			{
-				case 0: return B3;
-				case 1: return B2;
-				case 2: return B1;
-				case 3: return B0;
-				case 4: return B5;
-				case 5: return B4;
-				case 6: return B7;
-				case 7: return B6;
+				case 0: return B0;
+				case 1: return B1;
+				case 2: return B2;
+				case 3: return B3;
+				case 4: return B4;
+				case 5: return B5;
+				case 6: return B6;
+				case 7: return B7;
 				case 8: return B8;
 				case 9: return B9;
 				case 10: return B10;
@@ -84,7 +84,7 @@ namespace Sander.SequentialGuid.App
 				case 14: return B14;
 				case 15: return B15;
 				default:
-					throw new IndexOutOfRangeException();
+					throw new IndexOutOfRangeException($"Position must be between 0 and 15, received {position}");
 			}
 		}
 	}

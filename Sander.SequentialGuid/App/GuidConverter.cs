@@ -9,9 +9,6 @@ namespace Sander.SequentialGuid.App
 		internal static unsafe Guid DecimalToGuid(decimal dec) =>
 			*(Guid*)(void*)&dec;
 
-		internal static unsafe decimal GuidToDecimal(Guid guid) =>
-			*(decimal*)(void*)&guid;
-
 		/// <summary>
 		///     From https://stackoverflow.com/a/49380620/3248515
 		/// </summary>

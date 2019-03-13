@@ -7,6 +7,7 @@ namespace PerformanceTests
 {
 	[MemoryDiagnoser]
 	[ClrJob(true)]
+	[HardwareCounters()]
 	public class GetByteAtBenchmark
 	{
 		private List<Guid> _guids;

@@ -149,7 +149,7 @@ namespace Sander.SequentialGuid.Tests
 				{
 					var a = guid.GetByteAt(i);
 					var s = byteArray[i];
-					Trace.Write($"{s}:{a}.");
+					Trace.Write($"{i}: {s}:{a}.");
 					Assert.AreEqual(s, a);
 				}
 			}

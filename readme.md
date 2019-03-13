@@ -31,7 +31,7 @@ TBD
 Extension methods are implemented in class GuidExtensions.
 
 * **`GetCharacterAt(int position)`**- get a hexadecimal character at the specified position in GUID (0..31). As this does not rely on GUID being cast to string, it is much faster and uses less memory than default option - see the [benchmark](https://github.com/SanderSade/SequentialGuid/blob/master/Tests/PerformanceTests/Results/PerformanceTests.CharacterAtBenchmark-report-github.md).
-*  **`GetByteAt(int position)`** - get byte at the specified position (0..15). Similar performance to ``ToByteArray()[x]``, but uses ~30x less memory, see the [benchmark](https://github.com/SanderSade/SequentialGuid/blob/master/Tests/PerformanceTests/Results/PerformanceTests.GetByteAtBenchmark-report-github.md). Note that this uses "Microsoft" byte order (see next method), to be compliant with ToByteArray() output.
+*  **`GetByteAt(int position)`** - get byte at the specified position (0..15). Somewhat faster than ``ToByteArray()[position]``, and uses ~30x less memory, see the [benchmark](https://github.com/SanderSade/SequentialGuid/blob/master/Tests/PerformanceTests/Results/PerformanceTests.GetByteAtBenchmark-report-github.md). Note that this uses "Microsoft" byte order (see next method), to be compliant with ToByteArray() output.
 * **`ToCompliantByteArray()`** - .NET and Microsoft use [different byte order](https://stackoverflow.com/questions/9195551/why-does-guid-tobytearray-order-the-bytes-the-way-it-does) inside GUID structure than other platforms (Java, Python and more). This returns byte array in the same order as Java/Python, and is suitable to be put to the data stores without native GUID/UUID implementation. Use `GuidHelper.FromCompliantByteArray()` to reverse the operation, as the [`new Guid(byte[] b)`](https://docs.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=netframework-4.7.2#System_Guid__ctor_System_Byte___) constructor expects ToByteArray()/Microsoft byte order.
 * **`ToBigInteger(bool isCompliant)`** - convert GUID to [BigInteger](https://docs.microsoft.com/en-us/dotnet/api/system.numerics.biginteger?view=netframework-4.7.2). isCompliant = true is the default, and uses the same approach as ToCompliantByteArray() above, creating integer compatible with other systems and websites (e.g. http://guid-convert.appspot.com).
 * **`ToLongs()`** - convert GUID to (long, long) C# 7 tuple. Generally this should not be needed, but some Javascript libraries have used two integers to represent GUID, which doesn't exist as a native data type in JS.
@@ -46,13 +46,9 @@ Helper methods are in static class GuidHelper.
 * **`FromCompliantByteArray(byte[] bytes)`** - see `ToCompliantByteArray()` above.
 
 ### Dependencies
-* System.Reflection 4.3.0
-* System.Reflection.Emit.Lightweight 4.3.0
-* System.Reflection.TypeExtensions 4.5.1
 * System.Runtime.Numerics 4.3.0
 * System.ValueTuple 4.5.0
 
 ### Ideas for future
 * Better handling of locking. Right now, roughly 1/3 of the Next() call is spent on lock.
-* Reduce dependencies. System.Reflection.* use in PrivateFieldProvider can be replaced with GuidBytes.GetByteAt(), probably with a very minor speed loss.
 * ToCompliantByteArray() - remove list use, just map array to array.
