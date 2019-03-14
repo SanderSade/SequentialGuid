@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -29,20 +30,23 @@ namespace Sander.SequentialGuid.Tests
 		[TestMethod]
 		public void MultiThreadTest()
 		{
-			var guid = Guid.NewGuid();
-			var sequential = new SequentialGuid(guid);
-			Enumerable.Range(0, 1000000)
-				.AsParallel()
-				.WithDegreeOfParallelism(512)
-				.WithExecutionMode(ParallelExecutionMode.ForceParallelism)
-				.ForAll(x => sequential.Next());
+			for (var i = 10_000; i < 12_000; i++)
+			{
+				var guid = Guid.NewGuid();
+				var sequential = new SequentialGuid(guid);
+				Enumerable.Range(0, i)
+					.AsParallel()
+					.WithDegreeOfParallelism(512)
+					.WithExecutionMode(ParallelExecutionMode.ForceParallelism)
+					.ForAll(_ => sequential.Next());
 
-			var next = sequential.Next();
-			var original = guid.ToBigInteger();
-			var diff = next.ToBigInteger() - original;
-			Trace.WriteLine($"{guid} - {next} = {diff}");
+				var next = sequential.Next();
+				var original = guid.ToBigInteger();
+				var diff = next.ToBigInteger() - original;
+				Trace.WriteLine($"{guid} - {next} = {diff}");
 
-			Assert.AreEqual(1000001, diff);
+				Assert.AreEqual(i + 1, diff);
+			}
 		}
 
 		[TestMethod]
@@ -148,6 +152,28 @@ namespace Sander.SequentialGuid.Tests
 					Assert.AreEqual(g, guids[j]);
 				}
 
+			}
+		}
+
+
+
+		[TestMethod]
+		public void MultithreadDuplicateTest()
+		{
+			for (var i = 10_000; i < 12_000; i++)
+			{
+				var bag = new ConcurrentBag<Guid>();
+				var guid = Guid.NewGuid();
+				var sequential = new SequentialGuid(guid);
+				Enumerable.Range(0, i)
+					.AsParallel()
+					.WithDegreeOfParallelism(512)
+					.WithExecutionMode(ParallelExecutionMode.ForceParallelism)
+					.ForAll(_ => bag.Add(sequential.Next()));
+
+				var distinct = bag.Distinct().ToList();
+
+				Assert.AreEqual(distinct.Count, bag.Count);
 			}
 		}
 

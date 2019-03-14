@@ -15,11 +15,11 @@ namespace PerformanceTests
 			//Console.ReadKey();
 			//return;
 			var summary1 = BenchmarkRunner.Run<SequentialGuidBenchmark>();
-			var summary2 = BenchmarkRunner.Run<CharacterAtBenchmark>();
-			var summary3 = BenchmarkRunner.Run<GetByteAtBenchmark>();
+			//var summary2 = BenchmarkRunner.Run<CharacterAtBenchmark>();
+			//var summary3 = BenchmarkRunner.Run<GetByteAtBenchmark>();
 			Console.Write(summary1.AllRuntimes);
-			Console.Write(summary2.AllRuntimes);
-			Console.Write(summary3.AllRuntimes);
+			//Console.Write(summary2.AllRuntimes);
+			//Console.Write(summary3.AllRuntimes);
 			Console.ReadKey();
 		}
 

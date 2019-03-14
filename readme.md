@@ -18,7 +18,7 @@ SequentialGuid is aimed for high-performance applications, as other such librari
 
 ### Features
 * Flexible - define the starting GUID and step, or use the default values
-* Fast and memory-efficient - even on a laptop, SequentialGuid handles over 25 million calls per second. This is comparable to the native UuidCreateSequential performance
+* Fast and memory-efficient - even on a laptop, SequentialGuid handles well over 25 million calls per second. This is comparable or faster than UuidCreateSequential performance
 * Thread-safe - create a single SequentialGuid instance for your web application and use it to generate sequential IDs
 * .NET Standard 2.0
 * Useful helper and extension methods, see below.
@@ -50,5 +50,4 @@ Helper methods are in static class GuidHelper.
 * System.ValueTuple 4.5.0
 
 ### Ideas for future
-* Better handling of locking. Right now, roughly 1/3 of the Next() call is spent on lock.
 * ToCompliantByteArray() - remove list use, just map array to array.

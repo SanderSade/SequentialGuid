@@ -6,7 +6,6 @@ using Sander.SequentialGuid;
 
 namespace PerformanceTests
 {
-	[MemoryDiagnoser]
 	[ClrJob(true)]
 	public class SequentialGuidBenchmark
 	{

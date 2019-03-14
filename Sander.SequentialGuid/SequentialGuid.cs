@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using Sander.SequentialGuid.App;
 
 [assembly: InternalsVisibleTo("Sander.SequentialGuid.Tests")]
@@ -12,10 +13,9 @@ namespace Sander.SequentialGuid
 	/// </summary>
 	public class SequentialGuid
 	{
-		private readonly object _lock = new object();
 		private readonly byte _step;
+		private volatile int _flag;
 		private GuidBytes _guidBytes;
-
 
 		/// <summary>
 		///     Creates a sequential GUID based on random GUID, optionally defining step
@@ -46,10 +46,11 @@ namespace Sander.SequentialGuid
 		{
 			get
 			{
-				lock (_lock)
-				{
-					return _guidBytes.Guid;
-				}
+				SpinWait.SpinUntil(() => Interlocked.CompareExchange(ref _flag, 1, 0) == 0);
+				//we need to do this to avoid race issues
+				var guid = _guidBytes.Guid;
+				_flag = 0;
+				return guid;
 			}
 		}
 
@@ -63,30 +64,32 @@ namespace Sander.SequentialGuid
 		/// </summary>
 		public Guid Next()
 		{
-			//about 1/3 of the time is spent on locking here...
-			lock (_lock)
-			{
-				//this is really non-elegant, rethink this!
-				if (!StepByte(ref _guidBytes.B15, _step) &&
-				    !StepByte(ref _guidBytes.B14) &&
-				    !StepByte(ref _guidBytes.B13) &&
-				    !StepByte(ref _guidBytes.B12) &&
-				    !StepByte(ref _guidBytes.B11) &&
-				    !StepByte(ref _guidBytes.B10) &&
-				    !StepByte(ref _guidBytes.B9) &&
-				    !StepByte(ref _guidBytes.B8) &&
-				    !StepByte(ref _guidBytes.B7) &&
-				    !StepByte(ref _guidBytes.B6) &&
-				    !StepByte(ref _guidBytes.B5) &&
-				    !StepByte(ref _guidBytes.B4) &&
-				    !StepByte(ref _guidBytes.B3) &&
-				    !StepByte(ref _guidBytes.B2) &&
-				    !StepByte(ref _guidBytes.B1) &&
-				    !StepByte(ref _guidBytes.B0))
-					throw new OverflowException("Cannot increase the GUID anymore. Maximum value reached");
+			//SpinWait is about 20% faster here than lock {}, but we need to be aware of avoiding a race condition below
+			SpinWait.SpinUntil(() => Interlocked.CompareExchange(ref _flag, 1, 0) == 0);
 
-				return _guidBytes.Guid;
-			}
+			//this is really non-elegant, rethink this!
+			if (!StepByte(ref _guidBytes.B15, _step) &&
+			    !StepByte(ref _guidBytes.B14) &&
+			    !StepByte(ref _guidBytes.B13) &&
+			    !StepByte(ref _guidBytes.B12) &&
+			    !StepByte(ref _guidBytes.B11) &&
+			    !StepByte(ref _guidBytes.B10) &&
+			    !StepByte(ref _guidBytes.B9) &&
+			    !StepByte(ref _guidBytes.B8) &&
+			    !StepByte(ref _guidBytes.B7) &&
+			    !StepByte(ref _guidBytes.B6) &&
+			    !StepByte(ref _guidBytes.B5) &&
+			    !StepByte(ref _guidBytes.B4) &&
+			    !StepByte(ref _guidBytes.B3) &&
+			    !StepByte(ref _guidBytes.B2) &&
+			    !StepByte(ref _guidBytes.B1) &&
+			    !StepByte(ref _guidBytes.B0))
+				throw new OverflowException("Cannot increase the GUID anymore. Maximum value reached");
+
+			//we need to do this to avoid race issues
+			var guid = _guidBytes.Guid;
+			_flag = 0;
+			return guid;
 		}
 
 		/// <summary>

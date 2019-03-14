@@ -10,8 +10,10 @@ Intel Core i7-8650U CPU 1.90GHz (Kaby Lake R), 1 CPU, 4 logical and 4 physical c
 Job=Clr  Runtime=Clr  
 
 ```
-|               Method |     Mean |    Error |   StdDev | Ratio | Gen 0/1k Op | Gen 1/1k Op | Gen 2/1k Op | Allocated Memory/Op |
-|--------------------- |---------:|---------:|---------:|------:|------------:|------------:|------------:|--------------------:|
-|       SequentialTest | 945.0 ms | 18.20 ms | 23.67 ms |  1.00 |           - |           - |           - |           381.48 MB |
-|                      |          |          |          |       |             |             |             |                     |
-| NativeSequentialTest | 866.4 ms | 17.11 ms | 16.00 ms |  1.00 |           - |           - |           - |           381.48 MB |
+|               Method |     Mean |     Error |    StdDev | Ratio |
+|--------------------- |---------:|----------:|----------:|------:|
+|       SequentialTest | 794.8 ms | 14.659 ms | 12.241 ms |  1.00 |
+|                      |          |           |           |       |
+| NativeSequentialTest | 881.6 ms |  7.803 ms |  6.516 ms |  1.00 |
+
+
