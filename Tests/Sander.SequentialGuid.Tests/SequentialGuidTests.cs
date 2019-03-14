@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
@@ -115,6 +116,39 @@ namespace Sander.SequentialGuid.Tests
 			var next = sequential.Next();
 			Trace.WriteLine($"{almostMax}: {next}");
 			Assert.AreEqual(guid, next);
+		}
+
+
+		[TestMethod]
+		public void CheckSortingTest()
+		{
+			for (byte i = 1; i < 0xFF; i++)
+			{
+				var guid = Guid.NewGuid();
+				var sequential = new SequentialGuid(guid, i);
+				var count = 10_000;
+				var guids = new List<Guid>(count);
+				var strings = new List<string>(count);
+
+				for (var j = 0; j < count; j++)
+				{
+					var s = sequential.Next();
+					guids.Add(s);
+					strings.Add(s.ToString("N"));
+				}
+
+				strings.Sort();
+
+				for (var j = 0; j < count; j++)
+				{
+					var g = new Guid(strings[j]);
+					if (g != guids[j])
+						Trace.WriteLine($"Expected {g}, got {guids[j]}");
+
+					Assert.AreEqual(g, guids[j]);
+				}
+
+			}
 		}
 
 	}

@@ -9,9 +9,9 @@ A very common use for GUID is a primary key in the database - but with non-seque
 
 To resolve this, SQL Server has [NEWSEQUENTIALID](https://docs.microsoft.com/en-us/sql/t-sql/functions/newsequentialid-transact-sql?view=sql-server-ver15), which creates alphanumerically sortable, sequential GUIDs. The downside ot this approach is that the application will have to wait the SQL Server to create the primary key before the entry becomes usable - and of course, there are other database engines that do not have similar functionality.
 
-Windows has a native [UuidCreateSequential](https://docs.microsoft.com/en-us/windows/desktop/api/rpcdce/nf-rpcdce-uuidcreatesequential) function, which is not available on other platforms where .NET is available.
+Windows has a native [UuidCreateSequential](https://docs.microsoft.com/en-us/windows/desktop/api/rpcdce/nf-rpcdce-uuidcreatesequential) function, which is not available on other .NET platforms.
 
-SequentialGuid library is implemented as a .NET Standard 2.0 package, allowing creation of sortable GUIDs prior storing data in the database on any compatible platform. In addition, there are useful helper functions to convert to/from GUID and more.
+SequentialGuid library is implemented as a .NET Standard 2.0 package, allowing creation of sortable GUIDs prior storing data in the database on any compatible platform. In addition, there are useful helper functions to convert to/from GUID or get specific chartacter/byte.
 
 SequentialGuid is aimed for high-performance applications, as other such libraries are often very underperforming or do not have comparable functionality. SequentialGuid performance is similar to the native UuidCreateSequential, see [benchmarks](https://github.com/SanderSade/SequentialGuid/blob/master/Tests/PerformanceTests/Results/PerformanceTests.SequentialGuidBenchmark-report-github.md).
 
@@ -21,7 +21,7 @@ SequentialGuid is aimed for high-performance applications, as other such librari
 * Fast and memory-efficient - even on a laptop, SequentialGuid handles over 25 million calls per second. This is comparable to the native UuidCreateSequential performance
 * Thread-safe - create a single SequentialGuid instance for your web application and use it to generate sequential IDs
 * .NET Standard 2.0
-* Includes useful helper and extension methods, see below.
+* Useful helper and extension methods, see below.
 
 ### Using SequentialGuid
 TBD
