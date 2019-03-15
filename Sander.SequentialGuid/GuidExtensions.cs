@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using Sander.SequentialGuid.App;
 
@@ -91,7 +89,7 @@ namespace Sander.SequentialGuid
 					break;
 			}
 
-			var guidByte = new GuidBytes {Guid = guid}.GetByteAt(remap);
+			var guidByte = new GuidBytes { Guid = guid }.GetByteAt(remap);
 
 			//logic similar to https://github.com/dotnet/corefx/blob/7622efd2dbd363a632e00b6b95be4d990ea125de/src/Common/src/CoreLib/System/Guid.cs#L989,
 			//but we're using nibble and not full byte
@@ -116,24 +114,26 @@ namespace Sander.SequentialGuid
 		/// </summary>
 		public static byte[] ToCompliantByteArray(this Guid guid)
 		{
-			var bytes = guid.ToByteArray();
-
-			//idea from https://stackoverflow.com/a/50679960/3248515.
-			var byteList = new List<byte>(16)
+			var converter = new GuidBytes { Guid = guid };
+			return new[]
 			{
-				bytes[6],
-				bytes[7],
-				bytes[4],
-				bytes[5],
-				bytes[0],
-				bytes[1],
-				bytes[2],
-				bytes[3]
+				converter.B15,
+				converter.B14,
+				converter.B13,
+				converter.B12,
+				converter.B11,
+				converter.B10,
+				converter.B9,
+				converter.B8,
+				converter.B6,
+				converter.B7,
+				converter.B4,
+				converter.B5,
+				converter.B0,
+				converter.B1,
+				converter.B2,
+				converter.B3
 			};
-
-			byteList.InsertRange(0, bytes.Skip(8).Reverse());
-
-			return byteList.ToArray();
 		}
 	}
 }

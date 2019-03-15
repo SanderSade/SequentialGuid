@@ -48,6 +48,3 @@ Helper methods are in static class GuidHelper.
 ### Dependencies
 * System.Runtime.Numerics 4.3.0
 * System.ValueTuple 4.5.0
-
-### Ideas for future
-* ToCompliantByteArray() - remove list use, just map array to array.

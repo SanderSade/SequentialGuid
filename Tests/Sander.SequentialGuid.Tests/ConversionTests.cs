@@ -47,6 +47,7 @@ namespace Sander.SequentialGuid.Tests
 		[TestMethod]
 		public void BigIntegerPythonTest()
 		{
+			//values per http://guid-convert.appspot.com
 			var guid = new Guid("ff8aa059-fcce-4757-99fc-dffd2d8d2599");
 			var bigInt = guid.ToBigInteger();
 			Assert.AreEqual("339672928206713999937804465197131048345", bigInt.ToString());
@@ -92,7 +93,6 @@ namespace Sander.SequentialGuid.Tests
 		}
 
 
-
 		[TestMethod]
 		public void DecimalMaxTest()
 		{
@@ -100,7 +100,6 @@ namespace Sander.SequentialGuid.Tests
 			var guid = GuidHelper.FromDecimal(dec);
 			Trace.WriteLine($"{guid}: {dec}");
 		}
-
 
 
 		[TestMethod]
@@ -164,12 +163,14 @@ namespace Sander.SequentialGuid.Tests
 				var guid = Guid.NewGuid();
 				var array = guid.ToCompliantByteArray();
 				var rev = new Guid(array);
-
 				Assert.AreNotEqual(guid, rev);
+				var msArray = guid.ToByteArray();
+				Trace.WriteLine($"{guid} => {BitConverter.ToString(array)}: {BitConverter.ToString(msArray)}");
+				Assert.AreNotEqual(array, msArray);
+
 				var byteRev = GuidHelper.FromCompliantByteArray(array);
 				Assert.AreEqual(guid, byteRev);
 			}
 		}
-
 	}
 }
