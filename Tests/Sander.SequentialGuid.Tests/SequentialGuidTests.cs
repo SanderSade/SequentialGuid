@@ -22,7 +22,7 @@ namespace Sander.SequentialGuid.Tests
 				var next = sequential.Next();
 				var bi = next.ToBigInteger();
 				Trace.WriteLine($"{bi}:{next}");
-				//Assert.AreEqual(i, bi);
+				Assert.AreEqual(i, bi);
 			}
 
 		}
