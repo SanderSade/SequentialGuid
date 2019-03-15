@@ -2,6 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
 	<metadata>
 		<id>Sander.SequentialGuid</id>
+		<title>Sander.SequentialGuid</title>
 		<version>1.0.0</version>
 		<authors>Sander Säde</authors>
 		<owners>Sander Säde</owners>
@@ -9,18 +10,14 @@
 		<licenseUrl>https://github.com/SanderSade/SequentialGuid/blob/master/LICENSE</licenseUrl>
 		<projectUrl>https://github.com/SanderSade/SequentialGuid/</projectUrl>
 		<iconUrl>https://img.shields.io/badge/Sequential-Guid-lightgrey.svg</iconUrl>
-		<description>By default, GUIDs are not alphanumerically continuous or sortable in a meaningful way.
-
-			A very common use for GUID is a primary key in the database - but with non-sequential GUIDs, it is not optimal to have the primary key as a clustered index. Using clustered index with nonsequential GUIDs can cause fragmentation and general performance issues.
-
-			To resolve this, SQL Server has NEWSEQUENTIALID, which creates alphanumerically sortable, sequential GUIDs. The downside ot this approach is that the application will have to wait the SQL Server to create the primary key before the entry becomes usable - and of course, there are other database engines that do not have similar functionality.
-
-			Windows has a native UuidCreateSequential function, which is not available on other .NET platforms.
-
-			SequentialGuid library is implemented as a .NET Standard 2.0 package, allowing creation of sortable GUIDs prior storing data in the database on any compatible platform. In addition, there are useful helper functions to convert to/from GUID or get specific chartacter/byte.
-
+		<description>
+			SequentialGuid library allows creation of alphanumerically sortable GUIDs prior to storing data in the database on any compatible platform. In addition, there are useful helper functions to convert to/from GUID or get specific character/byte.
 			SequentialGuid is aimed for high-performance applications, as other such libraries are often very underperforming or do not have comparable functionality.
 		</description>
+		<summary>
+			SequentialGuid library allows creation of alphanumerically sortable GUIDs prior to storing data in the database on any compatible platform. In addition, there are useful helper functions to convert to/from GUID or get specific character/byte.
+			SequentialGuid is aimed for high-performance applications, as other such libraries are often very underperforming or do not have comparable functionality.
+		</summary>
 		<copyright>© Sander Säde 2019</copyright>
 		<tags>sequential-guids guid guid-conversion guid-generator </tags>
 		<repository type="GitHub" url="https://github.com/SanderSade/SequentialGuid/" />
@@ -31,8 +28,9 @@
 			</group>
 		</dependencies>
 	</metadata>
-	 <files>
-	<file src="Sander.SequentialGuid\bin\Release\netstandard2.0\Sander.SequentialGuid.dll" target="lib\netstandard2.0" />
+	<files>
+		<file src="Sander.SequentialGuid\bin\Release\netstandard2.0\Sander.SequentialGuid.dll" target="lib\netstandard2.0" />
 		<file src="Sander.SequentialGuid\bin\Release\netstandard2.0\Sander.SequentialGuid.xml" target="lib\netstandard2.0" />
+		<file src="LICENSE" target="lib\netstandard2.0\LICENSE" />
 	</files>
 </package>

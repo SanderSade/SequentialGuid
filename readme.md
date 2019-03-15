@@ -11,7 +11,7 @@ To resolve this, SQL Server has [NEWSEQUENTIALID](https://docs.microsoft.com/en-
 
 Windows has a native [UuidCreateSequential](https://docs.microsoft.com/en-us/windows/desktop/api/rpcdce/nf-rpcdce-uuidcreatesequential) function, which is not available on other .NET platforms.
 
-SequentialGuid library is implemented as a .NET Standard 2.0 package, allowing creation of sortable GUIDs prior storing data in the database on any compatible platform. In addition, there are useful helper functions to convert to/from GUID or get specific chartacter/byte.
+SequentialGuid library is implemented as a .NET Standard 2.0 package, allowing creation of sortable GUIDs prior storing data in the database on any compatible platform. In addition, there are useful helper functions to convert to/from GUID or get specific character/byte.
 
 SequentialGuid is aimed for high-performance applications, as other such libraries are often very underperforming or do not have comparable functionality. SequentialGuid performance is similar to the native UuidCreateSequential, see [benchmarks](https://github.com/SanderSade/SequentialGuid/blob/master/Tests/PerformanceTests/Results/PerformanceTests.SequentialGuidBenchmark-report-github.md).
 
