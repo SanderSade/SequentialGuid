@@ -24,7 +24,30 @@ SequentialGuid is aimed for high-performance applications, as other such librari
 * Useful helper and extension methods, see below.
 
 ### Using SequentialGuid
-TBD
+Create one instance of SequentialGuid per sequence (most likely database table), sharing the instance among all the components which need that.
+
+
+```C#
+public MyClass()
+{
+...
+	var lastId = _myDatabaseProvider.GetLastId(); //get last primary key value (GUID) from the database
+	_sequentialGuid = new SequentialGuid(lastId, 32); //initialize SequentialGuid with lastId as base value and step 32
+	Trace.WriteLine(_sequentialGuid.Original); //trace the value that we used
+}
+
+public async Task<Guid> InsertEntity(ParentObject parent, ChildObject child)
+{
+	var nextId = _sequentialGuid.Next(); //get next sequential GUID, i.e. last + 32
+	parent.Id = nextId; //set the primary key for DB
+	child.ParentId = nextId; //set up the child-parent relation without having to insert parent object first and wait for the result
+	var task1 = _myDatabaseProvider.InsertAsync(parent); 
+	var task2 = _otherDatabaseProvider.InsertChildAsync(child);
+	await Task.WhenAll(task1, task2); //wait for both insertions to complete
+	return nextId;
+}
+
+```
 
 
 #### Extension methods

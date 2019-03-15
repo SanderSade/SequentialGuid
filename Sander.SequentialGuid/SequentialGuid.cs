@@ -14,7 +14,7 @@ namespace Sander.SequentialGuid
 	public class SequentialGuid
 	{
 		private readonly byte _step;
-		private volatile int _flag;
+		private volatile int _lockFlag;
 		private GuidBytes _guidBytes;
 
 		/// <summary>
@@ -46,10 +46,10 @@ namespace Sander.SequentialGuid
 		{
 			get
 			{
-				SpinWait.SpinUntil(() => Interlocked.CompareExchange(ref _flag, 1, 0) == 0);
+				SpinWait.SpinUntil(() => Interlocked.CompareExchange(ref _lockFlag, 1, 0) == 0);
 				//we need to do this to avoid race issues
 				var guid = _guidBytes.Guid;
-				_flag = 0;
+				_lockFlag = 0;
 				return guid;
 			}
 		}
@@ -65,7 +65,7 @@ namespace Sander.SequentialGuid
 		public Guid Next()
 		{
 			//SpinWait is about 20% faster here than lock {}, but we need to be aware of avoiding a race condition below
-			SpinWait.SpinUntil(() => Interlocked.CompareExchange(ref _flag, 1, 0) == 0);
+			SpinWait.SpinUntil(() => Interlocked.CompareExchange(ref _lockFlag, 1, 0) == 0);
 
 			//this is really non-elegant, rethink this!
 			if (!StepByte(ref _guidBytes.B15, _step) &&
@@ -88,7 +88,7 @@ namespace Sander.SequentialGuid
 
 			//we need to do this to avoid race issues
 			var guid = _guidBytes.Guid;
-			_flag = 0;
+			_lockFlag = 0;
 			return guid;
 		}
 
